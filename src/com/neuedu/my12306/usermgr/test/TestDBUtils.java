@@ -12,6 +12,8 @@ public class TestDBUtils {
 
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
+//		int i[]={1,2};
+//		System.out.println(i.toString());
 		showall();
 		addtest();
 		showall();

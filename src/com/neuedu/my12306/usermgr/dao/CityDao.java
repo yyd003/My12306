@@ -12,7 +12,7 @@ public interface CityDao {
 
 	public abstract boolean alter(City c) throws Exception;
 
-	public abstract City exactSearch(String s, Object o) throws Exception;
+	public abstract List<City> exactSearch(String s, Object o) throws Exception;
 
 	public abstract List<City> fuzzySearch(String s, Object o)
 			throws Exception;

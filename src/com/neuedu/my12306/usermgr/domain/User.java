@@ -1,5 +1,7 @@
 package com.neuedu.my12306.usermgr.domain;
 
+import java.util.Date;
+
 public class User {
 	private int autoLogin;
 	private String code;
@@ -14,7 +16,7 @@ public class User {
 	private String rule;
 	private String realname;
 	private int sex;
-	private String birthday;
+	private Date birthday;
 	private String cert;
 	private String content;
 	private String status;
@@ -125,11 +127,11 @@ public class User {
 		this.realname = realname;
 	}
 
-	public String getBirthday() {
+	public Date getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(String birthday) {
+	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
 

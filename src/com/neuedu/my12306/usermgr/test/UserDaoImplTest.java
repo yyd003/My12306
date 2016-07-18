@@ -2,25 +2,33 @@ package com.neuedu.my12306.usermgr.test;
 
 import static org.junit.Assert.*;
 
-import java.sql.SQLException;
+import java.sql.Date;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import com.neuedu.my12306.common.DBUtils;
-import com.neuedu.my12306.usermgr.dao.CityDao;
-import com.neuedu.my12306.usermgr.dao.CityDaoImpl;
-
+import com.neuedu.my12306.usermgr.dao.*;
+import com.neuedu.my12306.usermgr.domain.User;
 public class UserDaoImplTest {
 
 	@Before
 	public void setUp() throws Exception {
 	}
 
-//	@Test
+	@Test
 	public void testAdd() {
-		fail("Not yet implemented");
+		UserDao c = new UserDaoImpl(DBUtils.getConnection());
+		User U=new User();
+		Date birthday =new Date(1995, 2, 5);
+		U.setUsername("123");
+		U.setPassword("321");
+		U.setBirthday(birthday);
+		try {
+			Assert.assertTrue(c.add(U));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 //	@Test
@@ -43,7 +51,7 @@ public class UserDaoImplTest {
 		CityDao c = new CityDaoImpl(DBUtils.getConnection());
 		try {
 			Assert.assertNotNull(c.exactSearch("id", 1));
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -54,7 +62,7 @@ public class UserDaoImplTest {
 		CityDao c = new CityDaoImpl(DBUtils.getConnection());
 		try {
 			Assert.assertNotNull(c.fuzzySearch("id", "1"));
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

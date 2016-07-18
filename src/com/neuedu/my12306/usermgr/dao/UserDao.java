@@ -1,6 +1,7 @@
 package com.neuedu.my12306.usermgr.dao;
 
 import java.util.*;
+
 import com.neuedu.my12306.usermgr.domain.*;
 
 public interface UserDao {
@@ -30,4 +31,6 @@ public interface UserDao {
 	public abstract User login(String u,String p) throws Exception;
 
 	public abstract int save(User c) throws Exception;
+
+	boolean del(int[] i) throws Exception;
 }

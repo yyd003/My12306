@@ -89,9 +89,9 @@ public boolean del(City ct) {
 	}
 }
 @SuppressWarnings("finally")
-public City exactSearch(String key, Object value) {
+public List<City> exactSearch(String key, Object value) {
 	Connection conn = DBUtils.getConnection();
-	City ct = null;
+	List<City> ct = null;
 	
 	try {
 		DBUtils.beginTranscation(conn);

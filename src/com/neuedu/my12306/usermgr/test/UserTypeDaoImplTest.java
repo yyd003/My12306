@@ -4,13 +4,9 @@ import static org.junit.Assert.*;
 
 import java.sql.SQLException;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
+import org.junit.*;
 import com.neuedu.my12306.common.DBUtils;
-import com.neuedu.my12306.usermgr.dao.CertTypeDao;
-import com.neuedu.my12306.usermgr.dao.CertTypeDaoImpl;
+import com.neuedu.my12306.usermgr.dao.*;
 
 public class UserTypeDaoImplTest {
 
@@ -20,7 +16,6 @@ public class UserTypeDaoImplTest {
 
 //	@Test
 	public void testAdd() {
-		fail("Not yet implemented");
 	}
 
 //	@Test
@@ -40,7 +35,7 @@ public class UserTypeDaoImplTest {
 
 	@Test
 	public void testExactSearch() throws Exception {
-		CertTypeDao c = new CertTypeDaoImpl(DBUtils.getConnection());
+		UserTypeDao c = new UserTypeDaoImpl(DBUtils.getConnection());
 		try {
 			Assert.assertNotNull(c.exactSearch("id", 1));
 		} catch (SQLException e) {
@@ -51,7 +46,7 @@ public class UserTypeDaoImplTest {
 
 	@Test
 	public void testFuzzySearch() throws Exception{
-		CertTypeDao c = new CertTypeDaoImpl(DBUtils.getConnection());
+		UserTypeDao c = new UserTypeDaoImpl(DBUtils.getConnection());
 		try {
 			Assert.assertNotNull(c.fuzzySearch("content", "证"));
 		} catch (SQLException e) {

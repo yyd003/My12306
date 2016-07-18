@@ -100,12 +100,13 @@ public class CityDaoImpl implements CityDao {
 	}
 
 	@Override
-	public City exactSearch(String s, Object o) throws Exception {
+	public List<City> exactSearch(String s, Object o) throws Exception {
 		// TODO Auto-generated method stub
 		// "select * from  readermessage WHERE 读者姓名='张勇'"
 		ResultSet rs = null;
 		City c = null;
 		PreparedStatement pstmt = null;
+		List<City> result = new ArrayList<City>();
 		String ES_sql = "select * from tab_city Where " + s + "=?";
 		try {
 			pstmt = (PreparedStatement) conn.prepareStatement(ES_sql);
@@ -113,13 +114,14 @@ public class CityDaoImpl implements CityDao {
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				c = new City();
-				c.setCity(rs.getString("city"));
 				c.setId(rs.getInt("id"));
+				c.setCity(rs.getString("city"));
+				result.add(c);
 			}
 		} finally {
 			DBUtils.closeStatement(rs, pstmt);
 		}
-		return c;
+		return result;
 	}
 
 	@Override

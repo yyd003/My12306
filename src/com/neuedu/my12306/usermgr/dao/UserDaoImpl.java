@@ -1,14 +1,12 @@
 package com.neuedu.my12306.usermgr.dao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.sql.Date;
+import java.util.*;
 
 import com.mysql.jdbc.PreparedStatement;
 import com.neuedu.my12306.common.DBUtils;
-import com.neuedu.my12306.usermgr.domain.IpAddress;
-import com.neuedu.my12306.usermgr.domain.User;
+import com.neuedu.my12306.usermgr.domain.*;
 
 public class UserDaoImpl implements UserDao{
 			private Connection conn = null;
@@ -26,10 +24,12 @@ public class UserDaoImpl implements UserDao{
 			public boolean add(User c) throws Exception {
 				ResultSet rs = null;
 				PreparedStatement pstmt = null;
-				String add_sql = "insert into tab_user(user) values(?)";
+				String add_sql = "insert into tab_user(username,password,rule,realname,sex,city,cert_type,cert,birthday,user_type,status) values(?,?,2,'tc',1,110100,110000,1,000,?,1,1)";
 				try {
 					pstmt = (PreparedStatement) conn.prepareStatement(add_sql);
 					pstmt.setString(1, c.getUsername());
+					pstmt.setString(2, c.getPassword());
+					pstmt.setDate(3,  (Date) c.getBirthday());
 					pstmt.executeUpdate();
 				} finally {
 					DBUtils.closeStatement(rs, pstmt);
@@ -38,10 +38,32 @@ public class UserDaoImpl implements UserDao{
 			}
 
 			@Override
+			public boolean del(int[] i) throws Exception {
+				ResultSet rs = null;
+				PreparedStatement pstmt = null;
+				String it ="[";
+				for (int j : i) {
+					it+=i[j];it+=",";
+				}
+				//{1}
+				String del_sql = "delete from tab_user where id in ?";
+				// String sql = "delete from students where Name='" + name + "'";
+				try {
+					pstmt = (PreparedStatement) conn.prepareStatement(del_sql);
+					pstmt.setString(1, it);
+					pstmt.executeUpdate();
+				} finally {
+					DBUtils.closeStatement(rs, pstmt);
+				}
+				return true;
+			}
+			
+			@Override
 			public boolean del(User c) throws Exception {
 				ResultSet rs = null;
 				PreparedStatement pstmt = null;
-				String del_sql = "delete from tab_user where user=?";
+				//{1}
+				String del_sql = "delete from tab_user where Username = ?";
 				// String sql = "delete from students where Name='" + name + "'";
 				try {
 					pstmt = (PreparedStatement) conn.prepareStatement(del_sql);
@@ -57,7 +79,7 @@ public class UserDaoImpl implements UserDao{
 			public boolean alter(User c) throws Exception {
 				ResultSet rs = null;
 				PreparedStatement pstmt = null;
-				String ALT_sql = "update tab_user set user=? where id=?";
+				String ALT_sql = "update tab_user set Username=? where id=?";
 				try {
 					pstmt = (PreparedStatement) conn.prepareStatement(ALT_sql);
 					pstmt.setString(1, c.getUsername());
