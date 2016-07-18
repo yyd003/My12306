@@ -1,7 +1,6 @@
 package com.neuedu.my12306.usermgr.dao;
 
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 
 import com.mysql.jdbc.PreparedStatement;
@@ -24,12 +23,21 @@ public class UserDaoImpl implements UserDao{
 			public boolean add(User c) throws Exception {
 				ResultSet rs = null;
 				PreparedStatement pstmt = null;
-				String add_sql = "insert into tab_user(username,password,rule,realname,sex,city,cert_type,cert,birthday,user_type,status) values(?,?,2,'tc',1,110100,110000,1,000,?,1,1)";
+				String add_sql = "insert into tab_user(username,password,birthday,rule,realname,sex,city,cert_type,cert,user_type,status) values(?,?,?,?,?,?,?,?,?,?,?)";
 				try {
 					pstmt = (PreparedStatement) conn.prepareStatement(add_sql);
 					pstmt.setString(1, c.getUsername());
 					pstmt.setString(2, c.getPassword());
-					pstmt.setDate(3,  (Date) c.getBirthday());
+					pstmt.setDate(3, c.getBirthday());
+					pstmt.setString(4,  c.getRule());
+					pstmt.setString(5,  c.getRealname());
+					pstmt.setInt(6,  c.getSex());
+					pstmt.setInt(7,  c.getCity());
+					pstmt.setInt(8,  c.getCert_type());
+					pstmt.setString(9,  c.getCert());
+					pstmt.setInt(10,  c.getUser_type());
+					pstmt.setString(11,  c.getStatus());
+//					realname,sex,city,cert_type,cert,user_type,status
 					pstmt.executeUpdate();
 				} finally {
 					DBUtils.closeStatement(rs, pstmt);

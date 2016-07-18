@@ -1,6 +1,6 @@
 package com.neuedu.my12306.usermgr.domain;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class User {
 	private int autoLogin;
