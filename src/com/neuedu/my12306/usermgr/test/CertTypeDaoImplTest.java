@@ -1,4 +1,4 @@
-package com.neuedu.my12306.usermgr.dao;
+package com.neuedu.my12306.usermgr.test;
 
 import java.sql.SQLException;
 
@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.neuedu.my12306.common.DBUtils;
+import com.neuedu.my12306.usermgr.dao.CertTypeDao;
+import com.neuedu.my12306.usermgr.dao.CertTypeDaoImpl;
 
 public class CertTypeDaoImplTest {
 

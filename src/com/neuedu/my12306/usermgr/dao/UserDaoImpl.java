@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.mysql.jdbc.PreparedStatement;
 import com.neuedu.my12306.common.DBUtils;
+import com.neuedu.my12306.usermgr.domain.IpAddress;
 import com.neuedu.my12306.usermgr.domain.User;
 
 public class UserDaoImpl implements UserDao{
@@ -146,6 +147,49 @@ public class UserDaoImpl implements UserDao{
 					// if(rs!=null)rs.close();
 				}
 				return result;
+			}
+
+			@Override
+			public boolean deleteUsersProcedure(int[] t) throws Exception {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public List<IpAddress> getIpList() throws Exception {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public User login(String u, String p) throws Exception {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public int save(User c) throws Exception {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public int getListPageCount(int t, User c) throws Exception {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public int getListRowCount(User c) throws Exception {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public List<User> getUserListRS(int t, int i, User c)
+					throws Exception {
+				// TODO Auto-generated method stub
+				return null;
 			}
 
 }

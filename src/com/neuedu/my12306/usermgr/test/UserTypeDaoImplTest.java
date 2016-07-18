@@ -1,4 +1,4 @@
-package com.neuedu.my12306.usermgr.dao;
+package com.neuedu.my12306.usermgr.test;
 
 import static org.junit.Assert.*;
 
@@ -9,8 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.neuedu.my12306.common.DBUtils;
+import com.neuedu.my12306.usermgr.dao.CertTypeDao;
+import com.neuedu.my12306.usermgr.dao.CertTypeDaoImpl;
 
-public class UserDaoImplTest {
+public class UserTypeDaoImplTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -38,7 +40,7 @@ public class UserDaoImplTest {
 
 	@Test
 	public void testExactSearch() throws Exception {
-		CityDao c = new CityDaoImpl(DBUtils.getConnection());
+		CertTypeDao c = new CertTypeDaoImpl(DBUtils.getConnection());
 		try {
 			Assert.assertNotNull(c.exactSearch("id", 1));
 		} catch (SQLException e) {
@@ -48,14 +50,15 @@ public class UserDaoImplTest {
 	}
 
 	@Test
-	public void testFuzzySearch() throws Exception {
-		CityDao c = new CityDaoImpl(DBUtils.getConnection());
+	public void testFuzzySearch() throws Exception{
+		CertTypeDao c = new CertTypeDaoImpl(DBUtils.getConnection());
 		try {
-			Assert.assertNotNull(c.fuzzySearch("id", "1"));
+			Assert.assertNotNull(c.fuzzySearch("content", "证"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 
 }

@@ -1,4 +1,4 @@
-package com.neuedu.my12306.usermgr.service;
+package com.neuedu.my12306.usermgr.test;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +12,7 @@ import com.neuedu.my12306.common.DBUtils;
 import com.neuedu.my12306.usermgr.dao.CityDao;
 import com.neuedu.my12306.usermgr.dao.CityDaoImpl;
 
-public class CertTypeServiceTest {
+public class CityServiceTest {
 
 	@Before
 	public void setUp() throws Exception {

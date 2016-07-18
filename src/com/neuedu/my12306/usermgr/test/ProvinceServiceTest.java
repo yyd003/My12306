@@ -1,4 +1,4 @@
-package com.neuedu.my12306.usermgr.dao;
+package com.neuedu.my12306.usermgr.test;
 
 import static org.junit.Assert.*;
 
@@ -9,8 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.neuedu.my12306.common.DBUtils;
+import com.neuedu.my12306.usermgr.dao.CityDao;
+import com.neuedu.my12306.usermgr.dao.CityDaoImpl;
 
-public class CityDaoImplTest {
+public class ProvinceServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
