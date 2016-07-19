@@ -15,7 +15,20 @@ public class UserDaoImplTest {
 	@Before
 	public void setUp() throws Exception {
 	}
-	
+//	@Test
+	public void testLogin() {
+		UserDao c = new UserDaoImpl(DBUtils.getConnection());
+		User U=new User(); 
+		U.setUsername("admin");
+		U.setSex("1");
+		try {
+			System.out.println(c.login("admin","123456"));
+			Assert.assertNotNull(c.login("admin","123456"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}}
+
 //	@Test
 	public void testFind() {
 		UserDao c = new UserDaoImpl(DBUtils.getConnection());

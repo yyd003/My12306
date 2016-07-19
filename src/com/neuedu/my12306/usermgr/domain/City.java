@@ -6,6 +6,13 @@ public class City {
 	private String cityid;
 	private Integer father;
 	private String city;
+	private Province province;
+	public Province getProvince() {
+		return province;
+	}
+	public void setProvince(Province province) {
+		this.province = province;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -36,4 +43,5 @@ public class City {
 	public void setProvience(Province provience) {
 		this.provience = provience;
 	}
+	
 }

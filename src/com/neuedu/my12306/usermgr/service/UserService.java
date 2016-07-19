@@ -1,13 +1,11 @@
 package com.neuedu.my12306.usermgr.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
-import com.neuedu.my12306.common.DBUtils;
-import com.neuedu.my12306.usermgr.dao.UserDao;
-import com.neuedu.my12306.usermgr.dao.UserDaoImpl;
-import com.neuedu.my12306.usermgr.domain.User;
+import com.neuedu.my12306.common.*;
+import com.neuedu.my12306.usermgr.dao.*;
+import com.neuedu.my12306.usermgr.domain.*;
 
 public class UserService {
 	public static final UserService instance = new UserService();
@@ -41,9 +39,8 @@ public class UserService {
 
 @SuppressWarnings("finally")
 public boolean add(User ct) {
-
 	Connection conn = DBUtils.getConnection();
-	boolean IsSuccess = true;
+	boolean IsSuccess = false;
 	
 	try {
 		DBUtils.beginTranscation(conn);
@@ -55,7 +52,6 @@ public boolean add(User ct) {
 		DBUtils.commit(conn);
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
-
 		DBUtils.rollback(conn);
 		e.printStackTrace();
 		
@@ -169,4 +165,5 @@ public boolean alter(User ct) {
 		return IsSuccess;
 	}
 }
+
 }

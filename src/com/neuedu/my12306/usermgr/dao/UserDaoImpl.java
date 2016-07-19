@@ -26,6 +26,7 @@ public class UserDaoImpl implements UserDao{
 				int idx=0;
 				String add_sql = "insert into tab_user(username,password,birthday,rule,realname,sex,city,cert_type,cert,user_type,status,content,login_ip,image_path) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				try {
+					System.out.println(add_sql);
 					pstmt = (PreparedStatement) conn.prepareStatement(add_sql);
 					pstmt.setString(++idx, c.getUsername());
 					pstmt.setString(++idx, Md5Utils.md5(c.getPassword()));
@@ -369,9 +370,79 @@ public class UserDaoImpl implements UserDao{
 			}
 
 			@Override
-			public User login(String u, String p) throws Exception {
-				// TODO Auto-generated method stub
-				return null;
+			public User login(String username, String password) throws Exception {
+				// SQL语句
+				StringBuffer buff = new StringBuffer();
+				buff.append("SELECT u.*, ");
+				buff.append("c.id cid, c.cityid ccityid, c.city ccity, c.father cfather, ");
+				buff.append("p.id pid, p.provinceid pprovinceid, p.province pprovince, ");
+				buff.append("t.id tid, t.content tcontent, ");
+				buff.append("e.id eid, e.content econtent ");
+				buff.append("FROM tab_user  u, tab_city c, tab_province p, tab_usertype t, tab_certtype e ");
+				buff.append("WHERE u.city = c.id AND c.father = p.provinceid AND u.user_type = t.id AND u.cert_type = e.id ");
+				buff.append("AND username=? AND password = ? ");
+				String find_sql = buff.toString();
+//				System.out.println(find_sql);
+				User user = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				try {
+					// 设置语句对象，SQL语句条件
+					pstmt = conn.prepareStatement(find_sql);
+					pstmt.setString(1, username);
+					pstmt.setString(2, Md5Utils.md5(password));
+
+					rs = pstmt.executeQuery();
+					if (rs.next()) {
+						// 解析结果集对象，封装查询结果
+						user = new User();
+						user.setId(rs.getInt("id"));
+						user.setUsername(rs.getString("username"));
+						user.setPassword(rs.getString("password"));
+						user.setRule(rs.getString("rule"));
+						user.setRealname(rs.getString("realname"));
+						user.setSex(rs.getString("sex"));
+
+						// city
+						Province province = new Province();
+						province.setId(rs.getInt("pid"));
+						province.setProvince(rs.getString("pprovince"));
+						province.setProvinceid(rs.getString("pprovinceid"));
+
+						City city = new City();
+						city.setId(rs.getInt("cid"));
+						city.setCityId(rs.getString("ccityid"));
+						city.setCity(rs.getString("ccity"));
+						city.setProvince(province);
+
+						user.setCity(city);
+
+						// CertType
+						CertType certType = new CertType();
+						certType.setId(rs.getInt("eid"));
+						certType.setContent(rs.getString("econtent"));
+						user.setCertType(certType);
+
+						user.setCert(rs.getString("cert"));
+						user.setBirthday(rs.getDate("birthday"));
+
+						// UserType
+						UserType userType = new UserType();
+						userType.setId(rs.getInt("tid"));
+						userType.setContent(rs.getString("tcontent"));
+						user.setUserType(userType);
+
+						user.setContent(rs.getString("content"));
+						user.setStatus(rs.getString("status"));
+						user.setLogin_ip(rs.getString("login_ip"));
+						user.setImage_path(rs.getString("image_path"));
+					}
+				} finally {
+					 System.out.println("udim:" + pstmt);
+					DBUtils.closeStatement(rs, pstmt);
+				}
+
+				return user;
 			}
 
 			@Override
