@@ -26,6 +26,10 @@ public class UserDaoImplTest {
 		U.setUser_type(1);
 		U.setCity(110100);
 		U.setBirthday(birthday);
+		U.setRule("1");
+		U.setRealname("tc");
+		U.setCert("12345678901");
+		U.setStatus("1");
 		try {
 			Assert.assertTrue(c.add(U));
 		} catch (Exception e) {
@@ -36,7 +40,14 @@ public class UserDaoImplTest {
 
 //	@Test
 	public void testDel() {
-		fail("Not yet implemented");
+		int i[]={1,2};
+		UserDao c = new UserDaoImpl(DBUtils.getConnection());
+		try {
+			Assert.assertTrue(c.del(i));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 //	@Test

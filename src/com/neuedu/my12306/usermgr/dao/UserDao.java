@@ -30,7 +30,5 @@ public interface UserDao {
 	
 	public abstract User login(String u,String p) throws Exception;
 
-	public abstract int save(User c) throws Exception;
-
 	boolean del(int[] i) throws Exception;
 }

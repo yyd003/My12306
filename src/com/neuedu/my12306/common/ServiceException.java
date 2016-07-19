@@ -1,37 +1,24 @@
 package com.neuedu.my12306.common;
 
+/**
+ * Service异常类
+ */
+public class ServiceException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
 
-public class ServiceException extends Exception{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2571084252421965400L;
-	private String str;
 	public ServiceException() {
-		// TODO Auto-generated constructor stub
-		super();
-		
-	}
-	
-	public ServiceException(String str, Exception e) {
-		// TODO Auto-generated constructor stub
-		super();
-		this.str=str;
 	}
 
-	public String getStr() {
-		return str;
+	public ServiceException(String arg0) {
+		super(arg0);
 	}
 
-	public void setStr(String str) {
-		this.str = str;
+	public ServiceException(Throwable arg0) {
+		super(arg0);
 	}
 
-	@Override
-	public String getMessage() {
-		// TODO Auto-generated method stub
-		return getStr();
+	public ServiceException(String arg0, Throwable arg1) {
+		super(arg0, arg1);
 	}
-	
 
 }

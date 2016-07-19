@@ -12,8 +12,15 @@ public class TestDBUtils {
 
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-//		int i[]={1,2};
-//		System.out.println(i.toString());
+		int i[]={1,2};
+		String S = "(";
+		for (int j : i) {
+			S+=String.valueOf(j);
+			S+=",";
+		}
+		S=S.substring(0,S.length()-1);
+		S+=")";
+		System.out.println(S);
 		showall();
 		addtest();
 		showall();

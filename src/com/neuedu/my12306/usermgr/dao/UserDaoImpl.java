@@ -1,11 +1,14 @@
 package com.neuedu.my12306.usermgr.dao;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mysql.jdbc.PreparedStatement;
-import com.neuedu.my12306.common.DBUtils;
-import com.neuedu.my12306.usermgr.domain.*;
+import com.neuedu.my12306.common.*;
+import com.neuedu.my12306.usermgr.domain.IpAddress;
+import com.neuedu.my12306.usermgr.domain.User;
 
 public class UserDaoImpl implements UserDao{
 			private Connection conn = null;
@@ -27,7 +30,7 @@ public class UserDaoImpl implements UserDao{
 				try {
 					pstmt = (PreparedStatement) conn.prepareStatement(add_sql);
 					pstmt.setString(1, c.getUsername());
-					pstmt.setString(2, c.getPassword());
+					pstmt.setString(2, Md5Utils.md5(c.getPassword()));
 					pstmt.setDate(3, c.getBirthday());
 					pstmt.setString(4,  c.getRule());
 					pstmt.setString(5,  c.getRealname());
@@ -49,16 +52,21 @@ public class UserDaoImpl implements UserDao{
 			public boolean del(int[] i) throws Exception {
 				ResultSet rs = null;
 				PreparedStatement pstmt = null;
-				String it ="[";
+				String it ="(";
 				for (int j : i) {
-					it+=i[j];it+=",";
+					it+=String.valueOf(j);
+					it+=",";
 				}
+				it=it.substring(0,it.length()-1);
+				it+=")";
 				//{1}
-				String del_sql = "delete from tab_user where id in ?";
-				// String sql = "delete from students where Name='" + name + "'";
+				String del_sql = "DELETE FROM tab_user WHERE id in "+it+";";
+				// DELETE FROM tab_user WHERE id in(1,2);
+//				DELETE FROM 表名称 WHERE 列名称 = 值
 				try {
 					pstmt = (PreparedStatement) conn.prepareStatement(del_sql);
-					pstmt.setString(1, it);
+//					pstmt.setString(1, it);
+					System.out.println(pstmt.toString());
 					pstmt.executeUpdate();
 				} finally {
 					DBUtils.closeStatement(rs, pstmt);
@@ -195,12 +203,6 @@ public class UserDaoImpl implements UserDao{
 			public User login(String u, String p) throws Exception {
 				// TODO Auto-generated method stub
 				return null;
-			}
-
-			@Override
-			public int save(User c) throws Exception {
-				// TODO Auto-generated method stub
-				return 0;
 			}
 
 			@Override
