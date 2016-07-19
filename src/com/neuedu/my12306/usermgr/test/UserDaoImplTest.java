@@ -1,14 +1,12 @@
 package com.neuedu.my12306.usermgr.test;
 
 import static org.junit.Assert.*;
-
 import java.sql.*;
-
 import org.junit.*;
-
 import com.neuedu.my12306.common.DBUtils;
 import com.neuedu.my12306.usermgr.dao.*;
 import com.neuedu.my12306.usermgr.domain.User;
+
 public class UserDaoImplTest {
 
 	@Before

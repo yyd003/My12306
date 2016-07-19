@@ -26,21 +26,25 @@ public class UserDaoImpl implements UserDao{
 			public boolean add(User c) throws Exception {
 				ResultSet rs = null;
 				PreparedStatement pstmt = null;
-				String add_sql = "insert into tab_user(username,password,birthday,rule,realname,sex,city,cert_type,cert,user_type,status) values(?,?,?,?,?,?,?,?,?,?,?)";
+				int idx=0;
+				String add_sql = "insert into tab_user(username,password,birthday,rule,realname,sex,city,cert_type,cert,user_type,status,content,login_ip,image_path) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 				try {
 					pstmt = (PreparedStatement) conn.prepareStatement(add_sql);
-					pstmt.setString(1, c.getUsername());
-					pstmt.setString(2, Md5Utils.md5(c.getPassword()));
-					pstmt.setDate(3, c.getBirthday());
-					pstmt.setString(4,  c.getRule());
-					pstmt.setString(5,  c.getRealname());
-					pstmt.setInt(6,  c.getSex());
-					pstmt.setInt(7,  c.getCity());
-					pstmt.setInt(8,  c.getCert_type());
-					pstmt.setString(9,  c.getCert());
-					pstmt.setInt(10,  c.getUser_type());
-					pstmt.setString(11,  c.getStatus());
-//					realname,sex,city,cert_type,cert,user_type,status
+					pstmt.setString(++idx, c.getUsername());
+					pstmt.setString(++idx, Md5Utils.md5(c.getPassword()));
+					pstmt.setDate(++idx, c.getBirthday());
+					pstmt.setString(++idx,  c.getRule());
+					pstmt.setString(++idx,  c.getRealname());
+					pstmt.setInt(++idx,  c.getSex());
+					pstmt.setInt(++idx,  c.getCity());
+					pstmt.setInt(++idx,  c.getCert_type());
+					pstmt.setString(++idx,  c.getCert());
+					pstmt.setInt(++idx,  c.getUser_type());
+					pstmt.setString(++idx,  c.getStatus());
+					pstmt.setString(++idx,  c.getContent());
+					pstmt.setString(++idx,  c.getLogin_ip());
+					pstmt.setString(++idx,  c.getImage_path());
+//					content,login_ip,image_path
 					pstmt.executeUpdate();
 				} finally {
 					DBUtils.closeStatement(rs, pstmt);
@@ -194,20 +198,20 @@ public class UserDaoImpl implements UserDao{
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
 				List<User> result = new ArrayList<User>();
-				try {
-					// System.out.println(FS_sql);
-					pstmt = (PreparedStatement) conn.prepareStatement(FU_sql);
-					rs = pstmt.executeQuery();
-					while (rs.next()) {
-						User one = new User();
-						one.setId(rs.getInt("id"));
-						one.setUsername(rs.getString("user"));
-						result.add(one);
-					}
-				} finally {
-					DBUtils.closeStatement(rs, pstmt);
-					// if(rs!=null)rs.close();
-				}
+//				try {
+//					// System.out.println(FS_sql);
+//					pstmt = (PreparedStatement) conn.prepareStatement(FU_sql);
+//					rs = pstmt.executeQuery();
+//					while (rs.next()) {
+//						User one = new User();
+//						one.setId(rs.getInt("id"));
+//						one.setUsername(rs.getString("user"));
+//						result.add(one);
+//					}
+//				} finally {
+//					DBUtils.closeStatement(rs, pstmt);
+//					// if(rs!=null)rs.close();
+//				}
 				return result;
 			}
 
