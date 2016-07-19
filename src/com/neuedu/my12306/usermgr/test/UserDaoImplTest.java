@@ -1,8 +1,11 @@
 package com.neuedu.my12306.usermgr.test;
 
 import static org.junit.Assert.*;
+
 import java.sql.*;
+
 import org.junit.*;
+
 import com.neuedu.my12306.common.DBUtils;
 import com.neuedu.my12306.usermgr.dao.*;
 import com.neuedu.my12306.usermgr.domain.User;
@@ -12,8 +15,22 @@ public class UserDaoImplTest {
 	@Before
 	public void setUp() throws Exception {
 	}
+	
+//	@Test
+	public void testFind() {
+		UserDao c = new UserDaoImpl(DBUtils.getConnection());
+		User U=new User(); 
+		U.setUsername("admin");
+		U.setSex("1");
+		try {
+			System.out.println(c.findUser(U));
+			Assert.assertNotNull(c.findUser(U));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}}
 
-	@Test
+//	@Test
 	public void testAdd() {
 		UserDao c = new UserDaoImpl(DBUtils.getConnection());
 		User U=new User();   
@@ -28,6 +45,7 @@ public class UserDaoImplTest {
 		U.setRealname("tc");
 		U.setCert("12345678901");
 		U.setStatus("1");
+		U.setSex("1");
 		try {
 			Assert.assertTrue(c.add(U));
 		} catch (Exception e) {
@@ -58,7 +76,7 @@ public class UserDaoImplTest {
 		fail("Not yet implemented");
 	}
 
-	@Test
+//	@Test
 	public void testExactSearch() throws Exception {
 		CityDao c = new CityDaoImpl(DBUtils.getConnection());
 		try {
@@ -69,7 +87,7 @@ public class UserDaoImplTest {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testFuzzySearch() throws Exception {
 		CityDao c = new CityDaoImpl(DBUtils.getConnection());
 		try {

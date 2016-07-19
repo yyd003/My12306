@@ -3,6 +3,9 @@ package com.neuedu.my12306.usermgr.domain;
 import java.sql.Date;
 
 public class User {
+	private CertType certType;
+	private Province provience;
+	private City city2;
 	private int autoLogin;
 	private String code;
 	private String password2;
@@ -15,13 +18,14 @@ public class User {
 	private String password;
 	private String rule;
 	private String realname;
-	private int sex;
+	private String sex;
 	private Date birthday;
 	private String cert;
 	private String content;
 	private String status;
 	private String login_ip;
 	private String image_path;
+	private UserType userType;
 
 	public int getAutoLogin() {
 		return autoLogin;
@@ -55,11 +59,11 @@ public class User {
 		this.passwordOld = passwordOld;
 	}
 
-	public int getSex() {
+	public String getSex() {
 		return sex;
 	}
 
-	public void setSex(int sex) {
+	public void setSex(String sex) {
 		this.sex = sex;
 	}
 
@@ -85,6 +89,14 @@ public class User {
 
 	public void setCert_type(Integer cert_type) {
 		this.cert_type = cert_type;
+	}
+	
+	public void setCertType(CertType cert_type) {
+		this.certType = cert_type;
+	}
+	
+	public CertType getCertType() {
+		return certType;
 	}
 
 	public Integer getUser_type() {
@@ -174,4 +186,33 @@ public class User {
 	public void setImage_path(String image_path) {
 		this.image_path = image_path;
 	}
+
+	public void setCity(City city2) {
+		// TODO Auto-generated method stub
+	    this.city2=city2;	
+	}
+	
+	public City getcity() {
+		return city2;
+	}
+
+	public Province getProvience() {
+		return provience;
+	}
+
+	public void setProvience(Province provience) {
+		this.provience = provience;
+	}
+
+	public void setUserType(UserType userType) {
+		// TODO Auto-generated method stub
+		this.userType = userType;
+		
+	}
+	
+	public UserType getUserType() {
+		return userType;
+	}
+
+
 }

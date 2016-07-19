@@ -2,7 +2,7 @@ package com.neuedu.my12306.usermgr.domain;
 
 public class Province {
 	private Integer id;
-	private Integer provinceid;
+	private String  provinceid;
 	private String province;
 	public Integer getId() {
 		return id;
@@ -10,10 +10,10 @@ public class Province {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getProvinceid() {
+	public String  getProvinceid() {
 		return provinceid;
 	}
-	public void setProvinceid(Integer provinceid) {
+	public void setProvinceid(String  provinceid) {
 		this.provinceid = provinceid;
 	}
 	public String getProvince() {

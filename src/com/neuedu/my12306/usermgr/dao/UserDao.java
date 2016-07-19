@@ -32,6 +32,5 @@ public interface UserDao {
 
 	boolean del(int[] i) throws Exception;
 	
-	public abstract List<User> findUser(User u)
-			throws Exception;
+	public abstract User findUser(User u) throws Exception;
 }

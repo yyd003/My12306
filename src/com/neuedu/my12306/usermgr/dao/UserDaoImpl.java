@@ -1,14 +1,11 @@
 package com.neuedu.my12306.usermgr.dao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.InetAddress;
+import java.sql.*;
+import java.util.*;
 
-import com.mysql.jdbc.PreparedStatement;
 import com.neuedu.my12306.common.*;
-import com.neuedu.my12306.usermgr.domain.IpAddress;
-import com.neuedu.my12306.usermgr.domain.User;
+import com.neuedu.my12306.usermgr.domain.*;
 
 public class UserDaoImpl implements UserDao{
 			private Connection conn = null;
@@ -35,14 +32,14 @@ public class UserDaoImpl implements UserDao{
 					pstmt.setDate(++idx, c.getBirthday());
 					pstmt.setString(++idx,  c.getRule());
 					pstmt.setString(++idx,  c.getRealname());
-					pstmt.setInt(++idx,  c.getSex());
+					pstmt.setString(++idx,  c.getSex());
 					pstmt.setInt(++idx,  c.getCity());
 					pstmt.setInt(++idx,  c.getCert_type());
 					pstmt.setString(++idx,  c.getCert());
 					pstmt.setInt(++idx,  c.getUser_type());
 					pstmt.setString(++idx,  c.getStatus());
 					pstmt.setString(++idx,  c.getContent());
-					pstmt.setString(++idx,  c.getLogin_ip());
+					pstmt.setString(++idx,  InetAddress.getLocalHost().getHostAddress());
 					pstmt.setString(++idx,  c.getImage_path());
 //					content,login_ip,image_path
 					pstmt.executeUpdate();
@@ -192,28 +189,172 @@ public class UserDaoImpl implements UserDao{
 			}
 			
 			@Override
-			public List<User> findUser(User u) throws Exception {
-				// TODO Auto-generated method stub
-				StringBuffer FU_sql = new StringBuffer();
+			public User findUser(User one) throws SQLException {
+				// SQL语句
+				StringBuffer find_sql = new StringBuffer();
+				find_sql.append("SELECT u.*, ");
+				find_sql.append("c.id cid, c.cityid ccityid, c.city ccity, c.father cfather, ");
+				find_sql.append("p.id pid, p.provinceid pprovinceid, p.province pprovince, ");
+				find_sql.append("t.id tid, t.content tcontent, ");
+				find_sql.append("e.id eid, e.content econtent ");
+				find_sql.append("FROM tab_user  u, tab_city c, tab_province p, tab_usertype t, tab_certtype e ");
+				find_sql.append("WHERE u.city = c.id AND c.father = p.provinceid AND u.user_type = t.id AND u.cert_type = e.id");
+
+				// 查询条件标记
+				boolean tag = false;
+				// 查询条件id字段
+				Integer id = one.getId();
+				if (id != null && id != 0) {
+					find_sql.append(" AND u.id=" + id);
+					tag = true;
+				}
+				// 查询条件username字段
+				String username = one.getUsername();
+				if (username != null && !username.isEmpty()) {
+					find_sql.append(" AND u.username='" + username + "'");
+					tag = true;
+				}
+				// 查询条件password字段
+				String password = one.getPassword();
+				if (password != null && !password.isEmpty()) {
+					find_sql.append(" AND u.password='" + password + "'");
+					tag = true;
+				}
+				// 查询条件rule字段
+				String rule = one.getRule();
+				if (rule != null && !rule.isEmpty()) {
+					find_sql.append(" AND u.rule='" + rule + "'");
+					tag = true;
+				}
+				// 查询条件realname字段，模糊查询
+				String realname = one.getRealname();
+				if (realname != null && !realname.isEmpty()) {
+					find_sql.append(" AND u.realname LIKE '%" + realname + "%'");
+					tag = true;
+				}
+				// 查询条件sex字段
+				String sex = one.getSex();
+				if (sex != null && !sex.isEmpty()) {
+					find_sql.append(" AND u.sex='" + sex + "'");
+					tag = true;
+				}
+				// 查询条件city字段
+				if (one.getCity() != null) {
+					Integer city = one.getCity();
+					if (city != null && city != 0) {
+						find_sql.append(" AND u.city=" + city);
+						tag = true;
+					}
+				}
+				// 查询条件cert_type字段
+				if (one.getCert_type() != null) {
+					Integer certtype = one.getCert_type();
+					if (certtype != null && certtype != 0) {
+						find_sql.append(" AND u.cert_type=" + certtype);
+						tag = true;
+					}
+				}
+				// 查询条件cert字段
+				String cert = one.getCert();
+				if (cert != null && !cert.isEmpty()) {
+					find_sql.append(" AND u.cert LIKE '%" + cert + "%'");
+					tag = true;
+				}
+				// 查询条件user_type字段
+				if (one.getUser_type() != null) {
+					Integer usertype = one.getUser_type();
+					if (usertype != null && usertype != 0) {
+						find_sql.append(" AND u.user_type=" + usertype);
+						tag = true;
+					}
+				}
+				// 查询条件content字段
+				String content = one.getContent();
+				if (content != null && !content.isEmpty()) {
+					find_sql.append(" AND u.content LIKE '%" + content + "%'");
+					tag = true;
+				}
+				// 查询条件status字段
+				String status = one.getStatus();
+				if (status != null && !status.isEmpty()) {
+					find_sql.append(" AND u.status='" + status + "'");
+					tag = true;
+				}
+				// 查询条件login_ip字段
+				String ip = one.getLogin_ip();
+				if (ip != null && !ip.isEmpty()) {
+					find_sql.append(" AND u.login_ip='" + ip + "'");
+					tag = true;
+				}
+				// 查询条件image_path字段
+				String image = one.getImage_path();
+				if (image != null && !image.isEmpty()) {
+					find_sql.append(" AND u.image_path='" + image + "'");
+					tag = true;
+				}
+
+				// 若没有查询条件则返回对象为null
+				if (!tag) {
+					return null;
+				}
+
+				User user = null;
 				PreparedStatement pstmt = null;
 				ResultSet rs = null;
-				List<User> result = new ArrayList<User>();
-//				try {
-//					// System.out.println(FS_sql);
-//					pstmt = (PreparedStatement) conn.prepareStatement(FU_sql);
-//					rs = pstmt.executeQuery();
-//					while (rs.next()) {
-//						User one = new User();
-//						one.setId(rs.getInt("id"));
-//						one.setUsername(rs.getString("user"));
-//						result.add(one);
-//					}
-//				} finally {
-//					DBUtils.closeStatement(rs, pstmt);
-//					// if(rs!=null)rs.close();
-//				}
-				return result;
+
+				try {
+					pstmt = conn.prepareStatement(find_sql.toString());
+					rs = pstmt.executeQuery();
+					if (rs.next()) {
+						// 解析结果集对象，封装查询结果
+						user = new User();
+						user.setId(rs.getInt("id"));
+						user.setUsername(rs.getString("username"));
+						user.setPassword(rs.getString("password"));
+						user.setRule(rs.getString("rule"));
+						user.setRealname(rs.getString("realname"));
+						user.setSex(rs.getString("sex"));
+
+						// city
+						Province province = new Province();
+						province.setId(rs.getInt("pid"));
+						province.setProvince(rs.getString("pprovince"));
+						province.setProvinceid(rs.getString("pprovinceid"));
+
+						City city = new City();
+						city.setId(rs.getInt("cid"));
+						city.setCityId(rs.getString("ccityid"));
+						city.setCity(rs.getString("ccity"));
+						city.setProvience(province);
+
+						user.setCity(city);
+
+						// CertType
+						CertType certType = new CertType();
+						certType.setId(rs.getInt("eid"));
+						certType.setContent(rs.getString("econtent"));
+						user.setCertType(certType);;
+
+						user.setCert(rs.getString("cert"));
+						user.setBirthday(rs.getDate("birthday"));
+
+						// UserType
+						UserType userType = new UserType();
+						userType.setId(rs.getInt("tid"));
+						userType.setContent(rs.getString("tcontent"));
+						user.setUserType(userType);
+
+						user.setContent(rs.getString("content"));
+						user.setStatus(rs.getString("status"));
+						user.setLogin_ip(rs.getString("login_ip"));
+						user.setImage_path(rs.getString("image_path"));
+					}
+				} finally {
+					DBUtils.closeStatement(rs, pstmt);
+				}
+				return user;
 			}
+			
 
 			@Override
 			public boolean deleteUsersProcedure(int[] t) throws Exception {
