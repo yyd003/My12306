@@ -31,4 +31,7 @@ public interface UserDao {
 	public abstract User login(String u,String p) throws Exception;
 
 	boolean del(int[] i) throws Exception;
+	
+	public abstract List<User> findUser(User u)
+			throws Exception;
 }

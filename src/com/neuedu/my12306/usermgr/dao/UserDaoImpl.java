@@ -186,6 +186,30 @@ public class UserDaoImpl implements UserDao{
 				}
 				return result;
 			}
+			
+			@Override
+			public List<User> findUser(User u) throws Exception {
+				// TODO Auto-generated method stub
+				StringBuffer FU_sql = new StringBuffer();
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				List<User> result = new ArrayList<User>();
+				try {
+					// System.out.println(FS_sql);
+					pstmt = (PreparedStatement) conn.prepareStatement(FU_sql);
+					rs = pstmt.executeQuery();
+					while (rs.next()) {
+						User one = new User();
+						one.setId(rs.getInt("id"));
+						one.setUsername(rs.getString("user"));
+						result.add(one);
+					}
+				} finally {
+					DBUtils.closeStatement(rs, pstmt);
+					// if(rs!=null)rs.close();
+				}
+				return result;
+			}
 
 			@Override
 			public boolean deleteUsersProcedure(int[] t) throws Exception {
