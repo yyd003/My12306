@@ -48,6 +48,17 @@ public class CityDaoImplTest {
 			e.printStackTrace();
 		}
 	}
+	@Test
+	public void testProId() throws Exception {
+		CityDao c = new CityDaoImpl(DBUtils.getConnection());
+		try {
+			Assert.assertNotNull(c.getCityListByProid("110000"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 
 	@Test
 	public void testFuzzySearch() throws Exception {

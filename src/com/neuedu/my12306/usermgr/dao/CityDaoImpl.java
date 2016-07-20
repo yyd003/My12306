@@ -1,10 +1,7 @@
 package com.neuedu.my12306.usermgr.dao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.sql.*;
+import java.util.*;
 import com.mysql.jdbc.PreparedStatement;
 import com.neuedu.my12306.common.DBUtils;
 import com.neuedu.my12306.usermgr.domain.City;
@@ -19,6 +16,30 @@ public class CityDaoImpl implements CityDao {
 
 	public CityDaoImpl() {
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public List<City> getCityListByProid(String s) throws Exception {
+		// TODO Auto-generated method stub
+		ResultSet rs = null;
+		City c = null;
+		PreparedStatement pstmt = null;
+		List<City> result = new ArrayList<City>();
+		String ES_sql = "select * from tab_city Where father=?";
+		try {
+			pstmt = (PreparedStatement) conn.prepareStatement(ES_sql);
+			pstmt.setString(1, s);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				c = new City();
+				c.setId(rs.getInt("id"));
+				c.setCity(rs.getString("city"));
+				result.add(c);
+			}
+		} finally {
+			DBUtils.closeStatement(rs, pstmt);
+		}
+		return result;
 	}
 
 	@Override
@@ -129,7 +150,8 @@ public class CityDaoImpl implements CityDao {
 		// TODO Auto-generated method stub
 		// String sql = "SELECT MerchandiseID, MName, Number, InPrice, Explain"+
 		// " FROM repertory where MName like '%?%'";
-		String FS_sql = "select * from tab_city where " + s + " like '%"+ o + "%'";
+		String FS_sql = "select * from tab_city where " + s + " like '%" + o
+				+ "%'";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		List<City> result = new ArrayList<City>();

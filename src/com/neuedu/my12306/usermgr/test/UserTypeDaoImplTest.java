@@ -28,9 +28,15 @@ public class UserTypeDaoImplTest {
 		fail("Not yet implemented");
 	}
 
-//	@Test
+	@Test
 	public void testGetList() {
-		fail("Not yet implemented");
+		UserTypeDao c = new UserTypeDaoImpl(DBUtils.getConnection());
+		try {
+			Assert.assertNotNull(c.getList());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Test

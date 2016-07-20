@@ -12,14 +12,14 @@ import com.neuedu.my12306.usermgr.domain.CertType;
 public class CertTypeService {
 	public static final CertTypeService instance = new CertTypeService();
 
-	public static CertTypeService getCertTypeService() {
+	public static CertTypeService getService() {
 		return instance;
 	}
 
 	private CertTypeService() {
 	}
 
-	public List<CertType> getCertTypelist() throws Exception {
+	public List<CertType> getlist() throws Exception {
 		Connection conn = null;
 		List<CertType> res = null;
 		try {
@@ -48,7 +48,7 @@ public boolean add(CertType ct) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		CertTypeDao ctd = new CertTypeDaoImpl();
+		CertTypeDao ctd = new CertTypeDaoImpl(conn);
 
 		IsSuccess = ctd.add(ct);
 
@@ -72,7 +72,7 @@ public boolean del(CertType ct) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		CertTypeDao ctd = new CertTypeDaoImpl();
+		CertTypeDao ctd = new CertTypeDaoImpl(conn);
 
 		IsSuccess = ctd.del(ct);
 
@@ -96,7 +96,7 @@ public CertType exactSearch(String key, Object value) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		CertTypeDao ctd = new CertTypeDaoImpl();
+		CertTypeDao ctd = new CertTypeDaoImpl(conn);
 
 		ct = ctd.exactSearch(key, value);
 
@@ -121,7 +121,7 @@ public List<CertType> fuzzySearch(String key, Object value) throws SQLException 
 	try {
 		DBUtils.beginTranscation(conn);
 
-		CertTypeDao ctd = new CertTypeDaoImpl();
+		CertTypeDao ctd = new CertTypeDaoImpl(conn);
 
 		ctList = ctd.fuzzySearch(key, value);
 
@@ -153,7 +153,7 @@ public boolean alter(CertType ct) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		CertTypeDao ctd = new CertTypeDaoImpl();
+		CertTypeDao ctd = new CertTypeDaoImpl(conn);
 
 		IsSuccess = ctd.alter(ct);
 

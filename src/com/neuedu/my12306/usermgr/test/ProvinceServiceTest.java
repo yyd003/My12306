@@ -8,9 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.neuedu.my12306.common.DBUtils;
-import com.neuedu.my12306.usermgr.dao.CityDao;
-import com.neuedu.my12306.usermgr.dao.CityDaoImpl;
+import com.neuedu.my12306.usermgr.service.*;
 
 public class ProvinceServiceTest {
 
@@ -18,32 +16,38 @@ public class ProvinceServiceTest {
 	public void setUp() throws Exception {
 	}
 
-//	@Test
+	// @Test
 	public void testAdd() {
 		fail("Not yet implemented");
 	}
 
-//	@Test
+	// @Test
 	public void testDel() {
 		fail("Not yet implemented");
 	}
 
-//	@Test
+	// @Test
 	public void testAlter() {
 		fail("Not yet implemented");
 	}
 
-//	@Test
+	@Test
 	public void testGetList() {
-		fail("Not yet implemented");
+		ProvinceService c = ProvinceService.getService();
+		try {
+			Assert.assertNotNull(c.getlist());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Test
 	public void testExactSearch() throws Exception {
-		CityDao c = new CityDaoImpl(DBUtils.getConnection());
+		ProvinceService c = ProvinceService.getService();
 		try {
 			Assert.assertNotNull(c.exactSearch("id", 1));
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -51,7 +55,7 @@ public class ProvinceServiceTest {
 
 	@Test
 	public void testFuzzySearch() throws Exception {
-		CityDao c = new CityDaoImpl(DBUtils.getConnection());
+		ProvinceService c = ProvinceService.getService();
 		try {
 			Assert.assertNotNull(c.fuzzySearch("id", "1"));
 		} catch (SQLException e) {

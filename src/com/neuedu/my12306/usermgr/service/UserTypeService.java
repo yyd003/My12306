@@ -12,14 +12,14 @@ import com.neuedu.my12306.usermgr.domain.UserType;
 public class UserTypeService {
 	public static final UserTypeService instance = new UserTypeService();
 
-	public static UserTypeService getCertTypeService() {
+	public static UserTypeService getService() {
 		return instance;
 	}
 
 	private UserTypeService() {
 	}
 
-	public List<UserType> getCertTypelist() throws Exception {
+	public List<UserType> getlist() throws Exception {
 		Connection conn = null;
 		List<UserType> res = null;
 		try {
@@ -48,7 +48,7 @@ public boolean add(UserType ct) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		UserTypeDao ctd = new UserTypeDaoImpl();
+		UserTypeDao ctd = new UserTypeDaoImpl(conn);
 
 		IsSuccess = ctd.add(ct);
 
@@ -72,7 +72,7 @@ public boolean del(UserType ct) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		UserTypeDao ctd = new UserTypeDaoImpl();
+		UserTypeDao ctd = new UserTypeDaoImpl(conn);
 
 		IsSuccess = ctd.del(ct);
 
@@ -96,7 +96,7 @@ public UserType exactSearch(String key, Object value) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		UserTypeDao ctd = new UserTypeDaoImpl();
+		UserTypeDao ctd = new UserTypeDaoImpl(conn);
 
 		ct = ctd.exactSearch(key, value);
 
@@ -121,7 +121,7 @@ public List<UserType> fuzzySearch(String key, Object value) throws SQLException 
 	try {
 		DBUtils.beginTranscation(conn);
 
-		UserTypeDao ctd = new UserTypeDaoImpl();
+		UserTypeDao ctd = new UserTypeDaoImpl(conn);
 
 		ctList = ctd.fuzzySearch(key, value);
 
@@ -153,7 +153,7 @@ public boolean alter(UserType ct) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		UserTypeDao ctd = new UserTypeDaoImpl();
+		UserTypeDao ctd = new UserTypeDaoImpl(conn);
 
 		IsSuccess = ctd.alter(ct);
 

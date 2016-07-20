@@ -1,16 +1,9 @@
 package com.neuedu.my12306.usermgr.test;
 
 import static org.junit.Assert.*;
-
 import java.sql.SQLException;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.neuedu.my12306.common.DBUtils;
-import com.neuedu.my12306.usermgr.dao.CityDao;
-import com.neuedu.my12306.usermgr.dao.CityDaoImpl;
+import org.junit.*;
+import com.neuedu.my12306.usermgr.service.*;
 
 public class CityServiceTest {
 
@@ -40,10 +33,10 @@ public class CityServiceTest {
 
 	@Test
 	public void testExactSearch() throws Exception {
-		CityDao c = new CityDaoImpl(DBUtils.getConnection());
+		CityService c = CityService.getService();
 		try {
 			Assert.assertNotNull(c.exactSearch("id", 1));
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -51,9 +44,19 @@ public class CityServiceTest {
 
 	@Test
 	public void testFuzzySearch() throws Exception {
-		CityDao c = new CityDaoImpl(DBUtils.getConnection());
+		CityService c = CityService.getService();
 		try {
 			Assert.assertNotNull(c.fuzzySearch("id", "1"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void testProId() throws Exception {
+		CityService c = CityService.getService();
+		try {
+			Assert.assertNotNull(c.getCityListByProid("110000"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

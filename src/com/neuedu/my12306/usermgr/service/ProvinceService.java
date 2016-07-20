@@ -12,14 +12,14 @@ import com.neuedu.my12306.usermgr.domain.Province;
 public class ProvinceService {
 	public static final ProvinceService instance = new ProvinceService();
 
-	public static ProvinceService getCertTypeService() {
+	public static ProvinceService getService() {
 		return instance;
 	}
 
 	private ProvinceService() {
 	}
 
-	public List<Province> getCertTypelist() throws Exception {
+	public List<Province> getlist() throws Exception {
 		Connection conn = null;
 		List<Province> res = null;
 		try {
@@ -48,7 +48,7 @@ public boolean add(Province ct) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		ProvinceDao ctd = new ProvinceDaoImpl();
+		ProvinceDao ctd = new ProvinceDaoImpl(conn);
 
 		IsSuccess = ctd.add(ct);
 
@@ -72,7 +72,7 @@ public boolean del(Province ct) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		ProvinceDao ctd = new ProvinceDaoImpl();
+		ProvinceDao ctd = new ProvinceDaoImpl(conn);
 
 		IsSuccess = ctd.del(ct);
 
@@ -96,7 +96,7 @@ public Province exactSearch(String key, Object value) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		ProvinceDao ctd = new ProvinceDaoImpl();
+		ProvinceDao ctd = new ProvinceDaoImpl(conn);
 
 		ct = ctd.exactSearch(key, value);
 
@@ -121,7 +121,7 @@ public List<Province> fuzzySearch(String key, Object value) throws SQLException 
 	try {
 		DBUtils.beginTranscation(conn);
 
-		ProvinceDao ctd = new ProvinceDaoImpl();
+		ProvinceDao ctd = new ProvinceDaoImpl(conn);
 
 		ctList = ctd.fuzzySearch(key, value);
 
@@ -153,7 +153,7 @@ public boolean alter(Province ct) {
 	try {
 		DBUtils.beginTranscation(conn);
 
-		ProvinceDao ctd = new ProvinceDaoImpl();
+		ProvinceDao ctd = new ProvinceDaoImpl(conn);
 
 		IsSuccess = ctd.alter(ct);
 

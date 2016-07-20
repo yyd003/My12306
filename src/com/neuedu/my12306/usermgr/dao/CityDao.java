@@ -1,6 +1,7 @@
 package com.neuedu.my12306.usermgr.dao;
 
 import java.util.List;
+
 import com.neuedu.my12306.usermgr.domain.City;
 
 public interface CityDao {
@@ -16,4 +17,5 @@ public interface CityDao {
 
 	public abstract List<City> fuzzySearch(String s, Object o)
 			throws Exception;
+	public abstract List<City> getCityListByProid(String s) throws Exception;
 }

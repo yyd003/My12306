@@ -1,25 +1,22 @@
 package com.neuedu.my12306.usermgr.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
-
 import com.neuedu.my12306.common.DBUtils;
-import com.neuedu.my12306.usermgr.dao.CityDao;
-import com.neuedu.my12306.usermgr.dao.CityDaoImpl;
+import com.neuedu.my12306.usermgr.dao.*;
 import com.neuedu.my12306.usermgr.domain.City;
 
 public class CityService {
 	public static final CityService instance = new CityService();
 
-	public static CityService getCertTypeService() {
+	public static CityService getService() {
 		return instance;
 	}
 
 	private CityService() {
 	}
 
-	public List<City> getCertTypelist() throws Exception {
+	public List<City> getlist() throws Exception {
 		Connection conn = null;
 		List<City> res = null;
 		try {
@@ -39,134 +36,162 @@ public class CityService {
 
 	}
 
-@SuppressWarnings("finally")
-public boolean add(City ct) {
+	@SuppressWarnings("finally")
+	public boolean add(City ct) {
 
-	Connection conn = DBUtils.getConnection();
-	boolean IsSuccess = true;
-	
-	try {
-		DBUtils.beginTranscation(conn);
+		Connection conn = DBUtils.getConnection();
+		boolean IsSuccess = true;
 
-		CityDao ctd = new CityDaoImpl();
+		try {
+			DBUtils.beginTranscation(conn);
 
-		IsSuccess = ctd.add(ct);
+			CityDao ctd = new CityDaoImpl(conn);
 
-		DBUtils.commit(conn);
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
+			IsSuccess = ctd.add(ct);
 
-		DBUtils.rollback(conn);
-		e.printStackTrace();
-		
-	} finally {
-		DBUtils.closeConnection(conn);
-		return IsSuccess;
+			DBUtils.commit(conn);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+
+			DBUtils.rollback(conn);
+			e.printStackTrace();
+
+		} finally {
+			DBUtils.closeConnection(conn);
+			return IsSuccess;
+		}
 	}
-}
-@SuppressWarnings("finally")
-public boolean del(City ct) {
-	Connection conn = DBUtils.getConnection();
-	boolean IsSuccess = true;
-	
-	try {
-		DBUtils.beginTranscation(conn);
 
-		CityDao ctd = new CityDaoImpl();
+	@SuppressWarnings("finally")
+	public boolean del(City ct) {
+		Connection conn = DBUtils.getConnection();
+		boolean IsSuccess = true;
 
-		IsSuccess = ctd.del(ct);
+		try {
+			DBUtils.beginTranscation(conn);
 
-		DBUtils.commit(conn);
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
+			CityDao ctd = new CityDaoImpl(conn);
 
-		DBUtils.rollback(conn);
-		e.printStackTrace();
-		
-	} finally {
-		DBUtils.closeConnection(conn);
-		return IsSuccess;
+			IsSuccess = ctd.del(ct);
+
+			DBUtils.commit(conn);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+
+			DBUtils.rollback(conn);
+			e.printStackTrace();
+
+		} finally {
+			DBUtils.closeConnection(conn);
+			return IsSuccess;
+		}
 	}
-}
-@SuppressWarnings("finally")
-public List<City> exactSearch(String key, Object value) {
-	Connection conn = DBUtils.getConnection();
-	List<City> ct = null;
-	
-	try {
-		DBUtils.beginTranscation(conn);
 
-		CityDao ctd = new CityDaoImpl();
+	@SuppressWarnings("finally")
+	public List<City> exactSearch(String key, Object value) {
+		Connection conn = DBUtils.getConnection();
+		List<City> ct = null;
 
-		ct = ctd.exactSearch(key, value);
+		try {
+			DBUtils.beginTranscation(conn);
 
-		DBUtils.commit(conn);
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
+			CityDao ctd = new CityDaoImpl(conn);
 
-		DBUtils.rollback(conn);
-		e.printStackTrace();
-		
-	} finally {
-		DBUtils.closeConnection(conn);
-		return ct;
+			ct = ctd.exactSearch(key, value);
+
+			DBUtils.commit(conn);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+
+			DBUtils.rollback(conn);
+			e.printStackTrace();
+
+		} finally {
+			DBUtils.closeConnection(conn);
+			return ct;
+		}
 	}
-}
 
+	public List<City> fuzzySearch(String key, Object value) throws SQLException {
+		Connection conn = DBUtils.getConnection();
+		List<City> ctList = null;
 
-public List<City> fuzzySearch(String key, Object value) throws SQLException {
-	Connection conn = DBUtils.getConnection();
-	List<City> ctList = null;
-	
-	try {
-		DBUtils.beginTranscation(conn);
+		try {
+			DBUtils.beginTranscation(conn);
 
-		CityDao ctd = new CityDaoImpl();
+			CityDao ctd = new CityDaoImpl(conn);
 
-		ctList = ctd.fuzzySearch(key, value);
+			ctList = ctd.fuzzySearch(key, value);
 
-		DBUtils.commit(conn);
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
+			DBUtils.commit(conn);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 
-		DBUtils.rollback(conn);
-		e.printStackTrace();
-		
-	} finally {
-		DBUtils.closeConnection(conn);
+			DBUtils.rollback(conn);
+			e.printStackTrace();
+
+		} finally {
+			DBUtils.closeConnection(conn);
+		}
+
+		for (City certType : ctList) {
+			System.out.println(certType.getId() + ":" + certType.getCity());
+		}
+
+		return ctList;
 	}
-	
-	for (City certType : ctList) {
-		System.out.println(certType.getId() + ":" + certType.getCity());
+
+	@SuppressWarnings("finally")
+	public boolean alter(City ct) {
+		Connection conn = DBUtils.getConnection();
+		boolean IsSuccess = true;
+
+		try {
+			DBUtils.beginTranscation(conn);
+
+			CityDao ctd = new CityDaoImpl(conn);
+
+			IsSuccess = ctd.alter(ct);
+
+			DBUtils.commit(conn);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+
+			DBUtils.rollback(conn);
+			e.printStackTrace();
+
+		} finally {
+			DBUtils.closeConnection(conn);
+			return IsSuccess;
+		}
 	}
-	
-	return ctList;
-}
 
+	public List<City> getCityListByProid(String s) throws SQLException {
+		Connection conn = DBUtils.getConnection();
+		List<City> ctList = null;
 
+		try {
+			DBUtils.beginTranscation(conn);
 
-@SuppressWarnings("finally")
-public boolean alter(City ct) {
-	Connection conn = DBUtils.getConnection();
-	boolean IsSuccess = true;
-	
-	try {
-		DBUtils.beginTranscation(conn);
+			CityDao ctd = new CityDaoImpl(conn);
 
-		CityDao ctd = new CityDaoImpl();
+			ctList = ctd.getCityListByProid(s);
 
-		IsSuccess = ctd.alter(ct);
+			DBUtils.commit(conn);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 
-		DBUtils.commit(conn);
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
+			DBUtils.rollback(conn);
+			e.printStackTrace();
 
-		DBUtils.rollback(conn);
-		e.printStackTrace();
-		
-	} finally {
-		DBUtils.closeConnection(conn);
-		return IsSuccess;
+		} finally {
+			DBUtils.closeConnection(conn);
+		}
+
+		for (City certType : ctList) {
+			System.out.println(certType.getId() + ":" + certType.getCity());
+		}
+
+		return ctList;
 	}
-}
 }
