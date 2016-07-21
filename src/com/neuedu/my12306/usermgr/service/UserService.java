@@ -10,7 +10,7 @@ import com.neuedu.my12306.usermgr.domain.*;
 public class UserService {
 	public static final UserService instance = new UserService();
 
-	public static UserService getService() {
+	public static UserService getInstance() {
 		return instance;
 	}
 

@@ -18,4 +18,6 @@ public interface CityDao {
 	public abstract List<City> fuzzySearch(String s, Object o)
 			throws Exception;
 	public abstract List<City> getCityListByProid(String s) throws Exception;
+
+	public abstract City findByCity(String s)throws Exception;
 }

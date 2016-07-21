@@ -1,3 +1,85 @@
+var req=false;
+	function reg(){
+		alert("确认用户信息" +
+				 "\n用户名: " + document.getElementById("username").value +
+				 "\n性别: "+ document.getElementById("realname").value +
+				 "\n性别: "+ document.getElementById("sex").value +
+				 "\n邮箱: " +document.getElementById("email").value +
+				 "\n生日: " + document.getElementById("birth").value +
+				  "\n证件类型: " + document.getElementById("certType").value +
+				  "\n证件号码: " + document.getElementById("certNumber").value +
+				   "\n旅客类型: " + document.getElementById("userType").value +
+				 "\n地址: " + document.getElementById("province").value+document.getElementById("city").value);
+		if(window.XMLHttpRequest){
+			req =new XMLHttpRequest();
+		}else if(window.ActiveXObject){
+		req =new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		if(req){
+			var url="register?action=register";
+			req.open("post",url,false);
+			req.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			var username=document.getElementById("username").value;
+			var realname=document.getElementById("realname").value;
+			var sex=document.getElementById("sex").value;
+			var email=document.getElementById("email").value;
+			var birth=document.getElementById("birth").value;
+			var certType=document.getElementById("certType").value;
+			var certNumber=document.getElementById("certNumber").value;
+			var userType=document.getElementById("userType").value;
+			var province=document.getElementById("province").value;
+			var city=document.getElementById("city").value;
+			var password=document.getElementById("psw1").value;
+			// req.onreadystatechange=null;
+			req.send("username="+username);
+			req.send("realname="+realname);
+			req.send("sex="+sex);
+			req.send("email="+email);
+			req.send("birth="+birth);
+			req.send("certType="+certType);
+			req.send("certNumber="+certNumber);
+			req.send("userType="+userType);
+			req.send("province="+province);
+			req.send("city="+city);
+			req.send("password="+password);
+
+		}
+	}
+	// 处理请求
+	function processRequest(){
+		// document.getElementById("res").innerHTML="已经被占用";
+		if(window.XMLHttpRequest){
+			req =new XMLHttpRequest();
+		}else if(window.ActiveXObject){
+		req =new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		if(req){
+			var url="register?action=check";
+			req.open("post",url,false);
+			req.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			var username=document.getElementById("username").value;
+			req.onreadystatechange=updatePage;
+			req.send("username="+username);
+		}
+	}
+
+	function updatePage(){
+		if(req.readyState==4){
+			if(req.status==200){
+				var res1=req.responseText;
+//				alert("res="+res1);
+				if(res1==1){
+					document.getElementById("res").innerHTML="可以使用";
+//					alert("3");
+					
+				}else{
+					document.getElementById("res").innerHTML="已经被占用";
+					document.getElementById("username").focus();
+//					alert("4");
+				}
+			}
+		}
+	}
 //验证密码强度
 	function checkStrength()
 	{
@@ -148,3 +230,4 @@ province.onchange = function() {
 function chkPwd(){
 	var p1=document.getElementById("");
 }
+

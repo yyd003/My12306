@@ -2,22 +2,20 @@ package com.neuedu.my12306.usermgr.service;
 
 import java.sql.*;
 import java.util.List;
+
 import com.neuedu.my12306.common.DBUtils;
 import com.neuedu.my12306.usermgr.dao.*;
 import com.neuedu.my12306.usermgr.domain.City;
 
 public class CityService {
+	private static Connection conn = null;
 	public static final CityService instance = new CityService();
 
 	public static CityService getService() {
 		return instance;
 	}
 
-	private CityService() {
-	}
-
 	public List<City> getlist() throws Exception {
-		Connection conn = null;
 		List<City> res = null;
 		try {
 			conn = DBUtils.getConnection();
@@ -89,7 +87,7 @@ public class CityService {
 
 	@SuppressWarnings("finally")
 	public List<City> exactSearch(String key, Object value) {
-		Connection conn = DBUtils.getConnection();
+		conn = DBUtils.getConnection();
 		List<City> ct = null;
 
 		try {
@@ -111,9 +109,10 @@ public class CityService {
 			return ct;
 		}
 	}
+	
 
 	public List<City> fuzzySearch(String key, Object value) throws SQLException {
-		Connection conn = DBUtils.getConnection();
+		conn = DBUtils.getConnection();
 		List<City> ctList = null;
 
 		try {
@@ -188,10 +187,31 @@ public class CityService {
 			DBUtils.closeConnection(conn);
 		}
 
-		for (City certType : ctList) {
-			System.out.println(certType.getId() + ":" + certType.getCity());
-		}
+//		for (City certType : ctList) {
+//			System.out.println(certType.getId() + ":" + certType.getCity());
+//		}
 
 		return ctList;
+	}
+public City findByCity(String s) throws SQLException{
+	Connection conn = DBUtils.getConnection();
+	City c=null;
+	try {
+		DBUtils.beginTranscation(conn);
+
+		CityDao ctd = new CityDaoImpl(conn);
+
+		c = ctd.findByCity(s);
+
+		DBUtils.commit(conn);
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		DBUtils.rollback(conn);
+		e.printStackTrace();
+
+	} finally {
+		DBUtils.closeConnection(conn);
+	}
+		return c;		
 	}
 }

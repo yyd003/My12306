@@ -1,8 +1,11 @@
 package com.neuedu.my12306.usermgr.test;
 
 import static org.junit.Assert.*;
+
 import java.sql.SQLException;
+
 import org.junit.*;
+
 import com.neuedu.my12306.usermgr.service.*;
 
 public class CityServiceTest {
@@ -31,7 +34,7 @@ public class CityServiceTest {
 		fail("Not yet implemented");
 	}
 
-	@Test
+//	@Test
 	public void testExactSearch() throws Exception {
 		CityService c = CityService.getService();
 		try {
@@ -42,7 +45,7 @@ public class CityServiceTest {
 		}
 	}
 
-	@Test
+//	@Test
 	public void testFuzzySearch() throws Exception {
 		CityService c = CityService.getService();
 		try {
@@ -57,6 +60,16 @@ public class CityServiceTest {
 		CityService c = CityService.getService();
 		try {
 			Assert.assertNotNull(c.getCityListByProid("110000"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void testFCity() throws Exception {
+		CityService c = CityService.getService();
+		try {
+			Assert.assertNotNull(c.findByCity("东城区"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
