@@ -121,30 +121,6 @@ public class CityDaoImpl implements CityDao {
 	public void setConn(Connection conn) {
 		this.conn = conn;
 	}
-	
-	public City findByCity(String s){
-		ResultSet rs = null;
-		City c = null;
-		PreparedStatement pstmt = null;
-		List<City> result = new ArrayList<City>();
-		String ES_sql = "select * from tab_city Where father=?";
-		try {
-			pstmt = (PreparedStatement) conn.prepareStatement(ES_sql);
-			pstmt.setString(1, s);
-			rs = pstmt.executeQuery();
-			if (rs.next()) {
-				c = new City();
-				c.setId(rs.getInt("id"));
-				c.setCity(rs.getString("city"));
-				result.add(c);
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		} finally {
-			DBUtils.closeStatement(rs, pstmt);
-		}
-		return c;		
-	}
 
 	@Override
 	public List<City> exactSearch(String s, Object o) throws Exception {
@@ -169,27 +145,6 @@ public class CityDaoImpl implements CityDao {
 			DBUtils.closeStatement(rs, pstmt);
 		}
 		return result;
-	}
-
-	public City exactSearch0(String s, Object o) throws Exception {
-		// TODO Auto-generated method stub
-		// "select * from  readermessage WHERE 读者姓名='张勇'"
-		ResultSet rs = null;
-		City c = null;
-		PreparedStatement pstmt = null;
-		String ES_sql = "select * from tab_city Where " + s + "=?";
-		try {
-			pstmt = (PreparedStatement) conn.prepareStatement(ES_sql);
-			pstmt.setObject(1, o);
-			rs = pstmt.executeQuery();
-				rs.next();
-				c = new City();
-				c.setId(rs.getInt("id"));
-				c.setCity(rs.getString("city"));
-		} finally {
-			DBUtils.closeStatement(rs, pstmt);
-		}
-		return c;
 	}
 	@Override
 	public List<City> fuzzySearch(String s, Object o) throws Exception {

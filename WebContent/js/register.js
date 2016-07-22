@@ -4,7 +4,7 @@ var req=false;
 				 "\n用户名: " + document.getElementById("username").value +
 				 "\n性别: "+ document.getElementById("realname").value +
 				 "\n性别: "+ document.getElementById("sex").value +
-				 "\n邮箱: " +document.getElementById("email").value +
+//				 "\n邮箱: " +document.getElementById("email").value +
 				 "\n生日: " + document.getElementById("birth").value +
 				  "\n证件类型: " + document.getElementById("certType").value +
 				  "\n证件号码: " + document.getElementById("certNumber").value +

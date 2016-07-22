@@ -68,12 +68,8 @@ public class CityServiceTest {
 	@Test
 	public void testFCity() throws Exception {
 		CityService c = CityService.getService();
-		try {
-			Assert.assertNotNull(c.findByCity("东城区"));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			Assert.assertNull(c.findByCity("东城区"));
+
 	}
 
 }

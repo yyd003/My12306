@@ -72,7 +72,7 @@ public class RegisterServlet extends HttpServlet {
 		String username=request.getParameter("username");
 		String realname=request.getParameter("realname");
 		String sex=request.getParameter("sex");
-		String email=request.getParameter("email");
+//		String email=request.getParameter("email");
 		String birth=request.getParameter("birth");
 		String certType=request.getParameter("certType");
 		String certNumber=request.getParameter("certNumber");
@@ -86,7 +86,7 @@ public class RegisterServlet extends HttpServlet {
 		tmp.setUsername(username);
 		tmp.setRealname(realname);
 		tmp.setSex(sex);
-		tmp.setContent(email);
+//		tmp.setContent(email);
 		tmp.setBirthday(Date.valueOf(birth));
 		tmp.setCert_type(Integer.valueOf(certType));
 		tmp.setCert(certNumber);

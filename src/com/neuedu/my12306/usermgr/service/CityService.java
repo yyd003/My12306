@@ -193,20 +193,27 @@ public class CityService {
 
 		return ctList;
 	}
-public City findByCity(String s) throws SQLException{
+public City findByCity(String s){
 	Connection conn = DBUtils.getConnection();
 	City c=null;
+	List<City>cl=null;
 	try {
 		DBUtils.beginTranscation(conn);
 
 		CityDao ctd = new CityDaoImpl(conn);
 
-		c = ctd.findByCity(s);
+		cl = ctd.exactSearch("city", s);
+		if(!cl.isEmpty())	c=cl.get(0);
 
 		DBUtils.commit(conn);
 	} catch (Exception e) {
 		// TODO Auto-generated catch block
-		DBUtils.rollback(conn);
+		try {
+			DBUtils.rollback(conn);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		e.printStackTrace();
 
 	} finally {
