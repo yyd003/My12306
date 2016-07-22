@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.neuedu.my12306.common.Md5Utils;
 import com.neuedu.my12306.usermgr.domain.City;
 import com.neuedu.my12306.usermgr.domain.User;
 import com.neuedu.my12306.usermgr.service.CityService;
@@ -104,18 +105,29 @@ public class RegisterServlet extends HttpServlet {
 		tmp.setCert(certNumber);
 		tmp.setUser_type(Integer.valueOf(userType));
 		tmp.setCity(city1);
-		tmp.setPassword(password);
+		tmp.setPassword(Md5Utils.md5(password));
 		tmp.setRule("2");
 		tmp.setStatus("1");
+		tmp.setLogin_ip(request.getRemoteAddr());
 		boolean dbUser =userService.add(tmp);
-		String result ="0";
-		if(dbUser){
-			result="1";
+		String msg=null;
+		if (!dbUser) {
+			// MD5
+			msg = "注册成功";
+		} else {
+			msg = "用户名重复";
 		}
-		response.setContentType("text/html");
-		PrintWriter out =response.getWriter();
-		out.print(result);
-		out.close();
+	response.setContentType("text/html");
+	PrintWriter out = response.getWriter();
+	out.println("<html>");
+	out.println("<head> <meta charset='UTF-8'>");
+	out.println("<title>Hello</title>");
+	out.println("</head>");
+	out.println("<body>");
+	out.println("<p>" + msg + "</p>");
+	out.println("</body>");
+	out.println("</html>");
+	out.close();
 	}
-
 }
+
