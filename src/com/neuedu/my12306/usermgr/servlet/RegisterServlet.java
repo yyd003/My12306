@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.neuedu.my12306.usermgr.domain.City;
 import com.neuedu.my12306.usermgr.domain.User;
 import com.neuedu.my12306.usermgr.service.CityService;
 import com.neuedu.my12306.usermgr.service.UserService;
@@ -70,16 +71,27 @@ public class RegisterServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		CityService c=CityService.getService();
 		String username=request.getParameter("username");
+//		System.out.println(username);
 		String realname=request.getParameter("realname");
 		String sex=request.getParameter("sex");
 //		String email=request.getParameter("email");
 		String birth=request.getParameter("birth");
 		String certType=request.getParameter("certType");
-		String certNumber=request.getParameter("certNumber");
+		String certNumber=request.getParameter("cert");
 		String userType=request.getParameter("userType");
 //		String province=request.getParameter("province");
 		String city=request.getParameter("city");
-		Integer city1=(c.findByCity(city).getId());
+		
+		
+		city=new String(city.getBytes("ISO-8859-1"),"UTF-8");
+		System.out.println(city);
+		
+		
+		
+		City cf =c.findByCity(city);
+		Integer i=cf.getId();
+		System.out.println(i);
+		Integer city1=i;
 		String password=request.getParameter("password");
 		UserService userService =UserService.getInstance();
 		User tmp =new User();
@@ -93,7 +105,7 @@ public class RegisterServlet extends HttpServlet {
 		tmp.setUser_type(Integer.valueOf(userType));
 		tmp.setCity(city1);
 		tmp.setPassword(password);
-		tmp.setRule("1");
+		tmp.setRule("2");
 		tmp.setStatus("1");
 		boolean dbUser =userService.add(tmp);
 		String result ="0";

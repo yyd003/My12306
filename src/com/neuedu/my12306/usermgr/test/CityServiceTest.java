@@ -55,7 +55,7 @@ public class CityServiceTest {
 			e.printStackTrace();
 		}
 	}
-	@Test
+//	@Test
 	public void testProId() throws Exception {
 		CityService c = CityService.getService();
 		try {
@@ -66,9 +66,10 @@ public class CityServiceTest {
 		}
 	}
 	@Test
-	public void testFCity() throws Exception {
+	public void testFCity() {
 		CityService c = CityService.getService();
-			Assert.assertNull(c.findByCity("东城区"));
+		System.out.println(c.findByCity("石家庄市"));
+		Assert.assertNotNull(c.findByCity("石家庄市"));
 
 	}
 

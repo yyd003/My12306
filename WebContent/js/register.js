@@ -10,40 +10,6 @@ var req=false;
 				  "\n证件号码: " + document.getElementById("certNumber").value +
 				   "\n旅客类型: " + document.getElementById("userType").value +
 				 "\n地址: " + document.getElementById("province").value+document.getElementById("city").value);
-		if(window.XMLHttpRequest){
-			req =new XMLHttpRequest();
-		}else if(window.ActiveXObject){
-		req =new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		if(req){
-			var url="register?action=register";
-			req.open("post",url,false);
-			req.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-			var username=document.getElementById("username").value;
-			var realname=document.getElementById("realname").value;
-			var sex=document.getElementById("sex").value;
-			var email=document.getElementById("email").value;
-			var birth=document.getElementById("birth").value;
-			var certType=document.getElementById("certType").value;
-			var certNumber=document.getElementById("certNumber").value;
-			var userType=document.getElementById("userType").value;
-			var province=document.getElementById("province").value;
-			var city=document.getElementById("city").value;
-			var password=document.getElementById("psw1").value;
-			// req.onreadystatechange=null;
-			req.send("username="+username);
-			req.send("realname="+realname);
-			req.send("sex="+sex);
-			req.send("email="+email);
-			req.send("birth="+birth);
-			req.send("certType="+certType);
-			req.send("certNumber="+certNumber);
-			req.send("userType="+userType);
-			req.send("province="+province);
-			req.send("city="+city);
-			req.send("password="+password);
-
-		}
 	}
 	// 处理请求
 	function processRequest(){

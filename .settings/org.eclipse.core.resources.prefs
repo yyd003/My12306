@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/com/neuedu/my12306/usermgr/dao=UTF-8
 encoding//src/com/neuedu/my12306/usermgr/dao/CertTypeDaoImpl.java=UTF-8
+encoding//src/com/neuedu/my12306/usermgr/servlet/RegisterServlet.java=UTF-8
 encoding//src/com/neuedu/my12306/usermgr/test/CertTypeDaoImplTest.java=UTF-8
 encoding/<project>=UTF-8
