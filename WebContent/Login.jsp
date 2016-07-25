@@ -66,7 +66,8 @@
 					</table></br></br>
 							<input type="submit" value = "登录">
 							&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="submit" value = "注册新用户" onclick="document.location.href='UserRegistration.jsp'"">
+							<input type="button" value = "注册新用户" onclick="window.location.href ='register?action=show'"">
+				<!-- document.location.href='UserRegistration.jsp'; -->
 				</center>
 				</div>
 				

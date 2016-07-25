@@ -54,8 +54,7 @@ public class RegisterServlet extends HttpServlet {
 			doUsernameCheck(request, response);
 		} else if ("show".equals(action)) {
 			dataInit(request, response);
-			request.getRequestDispatcher("/UserRegistration.jsp").forward(
-					request, response);
+		request.getRequestDispatcher("/UserRegistration.jsp").forward(request, response);
 		} else if ("findCity".equals(action)) {
 			doFindCity(request, response);
 		}
@@ -70,7 +69,7 @@ public class RegisterServlet extends HttpServlet {
 		try {
 			dataList = cts.getCityListByProid(request
 					.getParameter("provinceId"));
-			System.out.println(dataList);
+//			System.out.println(dataList);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

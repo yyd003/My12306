@@ -6,6 +6,7 @@ import java.util.*;
 
 import com.neuedu.my12306.common.*;
 import com.neuedu.my12306.usermgr.domain.*;
+import com.neuedu.my12306.common.page.*;
 
 public class UserDaoImpl implements UserDao {
 	private Connection conn = null;
@@ -97,9 +98,9 @@ public class UserDaoImpl implements UserDao {
 	public boolean alter(User c) throws Exception {
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
-		int idx=0;
+		int idx = 0;
 		String ALT_sql = "UPDATE tab_user set username=?,password=?,birthday=?,rule=?,realname=?,sex=?,city=?,cert_type=?,cert=?,user_type=?,status=?,content=?,login_ip=?,image_path=? where id=?";
-//		String ALT_sql = "update tab_user set Username=? where id=?";
+		// String ALT_sql = "update tab_user set Username=? where id=?";
 		try {
 			pstmt = (PreparedStatement) conn.prepareStatement(ALT_sql);
 			pstmt.setString(++idx, c.getUsername());
@@ -374,31 +375,47 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public boolean deleteUsersProcedure(int[] t) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public List<IpAddress> getIpList() throws Exception {
-		String find_sql = "select login_ip,content from tab_user";
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		List<IpAddress> result = new ArrayList<IpAddress>();
-		try {
-			pstmt = (PreparedStatement) conn.prepareStatement(find_sql);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				IpAddress one = new IpAddress();
-				one.setCnt(rs.getString("content"));
-				one.setIp(rs.getString("login_ip"));
-				result.add(one);
-			}
-		} finally {
-			DBUtils.closeStatement(rs, pstmt);
-			// if(rs!=null)rs.close();
-		}
-		return result;
+		// SQL语句
+				String sql = "select nvl(LOGIN_IP, '0.0.0.0') as ip, count(nvl(LOGIN_IP, '0.0.0.0')) as cnt from tab_user group by LOGIN_IP";
+
+				List<IpAddress> list = new ArrayList<IpAddress>();
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				try {
+					// 设置语句对象，SQL语句条件
+					pstmt = conn.prepareStatement(sql);
+					rs = pstmt.executeQuery();
+					while (rs.next()) {
+						// 解析结果集对象，封装查询结果
+						IpAddress ipAddress = new IpAddress();
+						ipAddress.setIp(rs.getString(1));
+						ipAddress.setCnt(rs.getString(2));
+						list.add(ipAddress);
+
+					}
+				} finally {
+					DBUtils.closeStatement(rs, pstmt);
+				}
+				return list;
+//		String find_sql = "select login_ip,content from tab_user";
+//		PreparedStatement pstmt = null;
+//		ResultSet rs = null;
+//		List<IpAddress> result = new ArrayList<IpAddress>();
+//		try {
+//			pstmt = (PreparedStatement) conn.prepareStatement(find_sql);
+//			rs = pstmt.executeQuery();
+//			while (rs.next()) {
+//				IpAddress one = new IpAddress();
+//				one.setCnt(rs.getString("content"));
+//				one.setIp(rs.getString("login_ip"));
+//				result.add(one);
+//			}
+//		} finally {
+//			DBUtils.closeStatement(rs, pstmt);
+//			// if(rs!=null)rs.close();
+//		}
+//		return result;
 	}
 
 	@Override
@@ -478,21 +495,474 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public int getListPageCount(int t, User c) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean deleteUsersProcedure(int[] userIdList) throws SQLException {
+		// 构建所有删除用户字符串，形如(100, 101)
+		String param = Arrays.toString(userIdList).replace("[", "(")
+				.replace("]", ")");
+
+		// SQL语句，调用存储过程delBigTab，第一个参数为表名，第二个参数为删除条件，第三个参数为每N条数据提交一次
+		String sql = "{call delBigTab(?,?,?)}";
+
+		boolean row = false;
+		// 调用存储过程需要声明CallableStatement对象
+		CallableStatement cst = null;
+		try {
+			// 获取执行对象
+			cst = conn.prepareCall(sql);
+			// 设置第一个参数，表名
+			cst.setString(1, "tab_user");
+			// 设置第二个参数，删除条件
+			cst.setString(2, "id IN " + param);
+			// 设置第三个参数，每100条数据提交一次
+			cst.setInt(3, 100);
+
+			row = cst.execute();
+		} finally {
+			DBUtils.closeStatement(null, cst);
+		}
+		return row;
 	}
 
 	@Override
-	public int getListRowCount(User c) throws Exception {
+	public int getListPageCount(int pageSize, User one) throws Exception {
 		// TODO Auto-generated method stub
-		return 0;
+		int res = 0;
+
+		int rowCount = getListRowCount(one);
+		if (rowCount % pageSize == 0) {
+			res = rowCount / pageSize;
+		} else {
+			res = rowCount / pageSize + 1;
+		}
+
+		return res;
 	}
 
 	@Override
-	public List<User> getUserListRS(int t, int i, User c) throws Exception {
+	public int getListRowCount(User one) throws Exception {
+		// TODO Auto-generated method stub
+		int rowCount = 0;
+		// SQL语句
+		StringBuffer find_sql = new StringBuffer();
+		find_sql.append("SELECT count(*) ");
+		find_sql.append("FROM tab_user  u, tab_city c, tab_province p, tab_usertype t, tab_certtype e ");
+		find_sql.append("WHERE u.city = c.id AND c.father = p.provinceid AND u.user_type = t.id AND u.cert_type = e.id");
+
+		// 查询条件id字段
+		Integer id = one.getId();
+		if (id != null && id != 0) {
+			find_sql.append(" AND u.id=" + id);
+		}
+		// 查询条件username字段
+		String username = one.getUsername();
+		if (username != null && !username.isEmpty()) {
+			find_sql.append(" AND u.username='" + username + "'");
+		}
+		// 查询条件password字段
+		String password = one.getPassword();
+		if (password != null && !password.isEmpty()) {
+			find_sql.append(" AND u.password='" + password + "'");
+		}
+		// 查询条件rule字段
+		String rule = one.getRule();
+		if (rule != null && !rule.isEmpty()) {
+			find_sql.append(" AND u.rule='" + rule + "'");
+		}
+		// 查询条件realname字段，模糊查询
+		String realname = one.getRealname();
+		if (realname != null && !realname.isEmpty()) {
+			find_sql.append(" AND u.realname LIKE '%" + realname + "%'");
+		}
+		// 查询条件sex字段
+		String sex = one.getSex();
+		if (sex != null && !sex.isEmpty()) {
+			find_sql.append(" AND u.sex='" + sex + "'");
+		}
+		// 查询条件city字段
+		if (one.getCity() != null) {
+			Integer city = one.getCity();
+			if (city != null && city != 0) {
+				find_sql.append(" AND u.city=" + city);
+			}
+		}
+		// 查询条件cert_type字段
+		if (one.getCertType() != null) {
+			Integer certtype = one.getCertType().getId();
+			if (certtype != null && certtype != 0) {
+				find_sql.append(" AND u.cert_type=" + certtype);
+			}
+		}
+		// 查询条件cert字段
+		String cert = one.getCert();
+		if (cert != null && !cert.isEmpty()) {
+			find_sql.append(" AND u.cert LIKE '%" + cert + "%'");
+		}
+		// 查询条件user_type字段
+		if (one.getUserType() != null) {
+			Integer usertype = one.getUserType().getId();
+			if (usertype != null && usertype != 0) {
+				find_sql.append(" AND u.user_type=" + usertype);
+			}
+		}
+		// 查询条件content字段
+		String content = one.getContent();
+		if (content != null && !content.isEmpty()) {
+			find_sql.append(" AND u.content LIKE '%" + content + "%'");
+		}
+		// 查询条件status字段
+		String status = one.getStatus();
+		if (status != null && !status.isEmpty()) {
+			find_sql.append(" AND u.status='" + status + "'");
+		}
+		// 查询条件login_ip字段
+		String ip = one.getLogin_ip();
+		if (ip != null && !ip.isEmpty()) {
+			find_sql.append(" AND u.login_ip='" + ip + "'");
+		}
+		// 查询条件image_path字段
+		String image = one.getImage_path();
+		if (image != null && !image.isEmpty()) {
+			find_sql.append(" AND u.image_path='" + image + "'");
+		}
+
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = conn.prepareStatement(find_sql.toString());
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				// 根据每页条数计算列表总页数
+				rowCount = rs.getInt(1);
+			}
+		} finally {
+			DBUtils.closeStatement(rs, pstmt);
+		}
+
+		return rowCount;
+	}
+	@Override
+	public List<User> getUserList(int pageSize, int rowNum, User one)
+			throws Exception {
+		// TODO Auto-generated method stub
+		// SQL语句
+				StringBuffer find_sql = new StringBuffer();
+				find_sql.append("SELECT u.*, ");
+				find_sql.append("c.id cid, c.cityid ccityid, c.city ccity, c.father cfather, ");
+				find_sql.append("p.id pid, p.provinceid pprovinceid, p.province pprovince, ");
+				find_sql.append("t.id tid, t.content tcontent, ");
+				find_sql.append("e.id eid, e.content econtent ");
+				find_sql.append("FROM tab_user  u, tab_city c, tab_province p, tab_usertype t, tab_certtype e ");
+				find_sql.append("WHERE u.city = c.id AND c.father = p.provinceid AND u.user_type = t.id AND u.cert_type = e.id");
+
+				// 查询条件id字段
+				Integer id = one.getId();
+				if (id != null && id != 0) {
+					find_sql.append(" AND u.id=" + id);
+				}
+				// 查询条件username字段
+				String username = one.getUsername();
+				if (username != null && !username.isEmpty()) {
+					find_sql.append(" AND u.username='" + username + "'");
+				}
+				// 查询条件password字段
+				String password = one.getPassword();
+				if (password != null && !password.isEmpty()) {
+					find_sql.append(" AND u.password='" + password + "'");
+				}
+				// 查询条件rule字段
+				String rule = one.getRule();
+				if (rule != null && !rule.isEmpty()) {
+					find_sql.append(" AND u.rule='" + rule + "'");
+				}
+				// 查询条件realname字段，模糊查询
+				String realname = one.getRealname();
+				if (realname != null && !realname.isEmpty()) {
+					find_sql.append(" AND u.realname LIKE '%" + realname + "%'");
+				}
+				// 查询条件sex字段
+				String sex = one.getSex();
+				if (sex != null && !sex.isEmpty()) {
+					find_sql.append(" AND u.sex='" + sex + "'");
+				}
+				// 查询条件city字段
+				if (one.getCity() != null) {
+					Integer city = one.getCity();
+					if (city != null && city != 0) {
+						find_sql.append(" AND u.city=" + city);
+					}
+				}
+				// 查询条件cert_type字段
+				if (one.getCertType() != null) {
+					Integer certtype = one.getCertType().getId();
+					if (certtype != null && certtype != 0) {
+						find_sql.append(" AND u.cert_type=" + certtype);
+					}
+				}
+				// 查询条件cert字段
+				String cert = one.getCert();
+				if (cert != null && !cert.isEmpty()) {
+					find_sql.append(" AND u.cert LIKE '%" + cert + "%'");
+				}
+				// 查询条件user_type字段
+				if (one.getUserType() != null) {
+					Integer usertype = one.getUserType().getId();
+					if (usertype != null && usertype != 0) {
+						find_sql.append(" AND u.user_type=" + usertype);
+					}
+				}
+				// 查询条件content字段
+				String content = one.getContent();
+				if (content != null && !content.isEmpty()) {
+					find_sql.append(" AND u.content LIKE '%" + content + "%'");
+				}
+				// 查询条件status字段
+				String status = one.getStatus();
+				if (status != null && !status.isEmpty()) {
+					find_sql.append(" AND u.status='" + status + "'");
+				}
+				// 查询条件login_ip字段
+				String ip = one.getLogin_ip();
+				if (ip != null && !ip.isEmpty()) {
+					find_sql.append(" AND u.login_ip='" + ip + "'");
+				}
+				// 查询条件image_path字段
+				String image = one.getImage_path();
+				if (image != null && !image.isEmpty()) {
+					find_sql.append(" AND u.image_path='" + image + "'");
+				}
+				// 分页SQL语句,这里可能得重写，因为不是在oracle中，而是在mysql中
+				// String sql = "select * from(select a1.*,rownum rn from ("
+				// + find_sql.toString() + ") a1 where rownum<=" + rowNum
+				// * pageSize + ")where rn>=" + ((rowNum - 1) * pageSize + 1);
+
+				User user = null;
+				PreparedStatement pstmt = null;
+				ResultSet rs = null;
+				List<User> list = new ArrayList<User>();
+				try {
+					// pstmt = conn.prepareStatement(sql);
+					pstmt = conn.prepareStatement(find_sql.toString());// 先查询全部
+					rs = pstmt.executeQuery();
+					while (rs.next()) {
+						// 解析结果集对象，封装查询结果
+						user = new User();
+						user.setId(rs.getInt("id"));
+						user.setUsername(rs.getString("username"));
+						user.setPassword(rs.getString("password"));
+						user.setRule(rs.getString("rule"));
+						user.setRealname(rs.getString("realname"));
+						user.setSex(rs.getString("sex"));
+
+						// city
+						Province province = new Province();
+						province.setId(rs.getInt("pid"));
+						province.setProvince(rs.getString("pprovince"));
+						province.setProvinceid(rs.getString("pprovinceid"));
+
+						City city = new City();
+						city.setId(rs.getInt("cid"));
+						city.setCityId(rs.getString("ccityid"));
+						city.setCity(rs.getString("ccity"));
+						city.setProvince(province);
+
+						user.setCity(city);
+
+						// CertType
+						CertType certType = new CertType();
+						certType.setId(rs.getInt("eid"));
+						certType.setContent(rs.getString("econtent"));
+						user.setCertType(certType);
+
+						user.setCert(rs.getString("cert"));
+						user.setBirthday(rs.getDate("birthday"));
+
+						// UserType
+						UserType userType = new UserType();
+						userType.setId(rs.getInt("tid"));
+						userType.setContent(rs.getString("tcontent"));
+						user.setUserType(userType);
+
+						user.setContent(rs.getString("content"));
+						user.setStatus(rs.getString("status"));
+						user.setLogin_ip(rs.getString("login_ip"));
+						user.setImage_path(rs.getString("image_path"));
+
+						list.add(user);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				finally {
+					DBUtils.closeStatement(rs, pstmt);
+				}
+				return list;
+			}
+//	@Override		
+//		public List<User> getUserListRS(int pageSize, int pageNum, User one)
+//				throws Exception {
+//			// TODO Auto-generated method stub
+//			// SQL语句
+//			StringBuffer find_sql = new StringBuffer();
+//			find_sql.append("SELECT u.*, ");
+//			find_sql.append("c.id cid, c.cityid ccityid, c.city ccity, c.father cfather, ");
+//			find_sql.append("p.id pid, p.provinceid pprovinceid, p.province pprovince, ");
+//			find_sql.append("t.id tid, t.content tcontent, ");
+//			find_sql.append("e.id eid, e.content econtent ");
+//			find_sql.append("FROM tab_user  u, tab_city c, tab_province p, tab_usertype t, tab_certtype e ");
+//			find_sql.append("WHERE u.city = c.id AND c.father = p.provinceid AND u.user_type = t.id AND u.cert_type = e.id");
+//
+//			// 查询条件id字段
+//			Integer id = one.getId();
+//			if (id != null && id != 0) {
+//				find_sql.append(" AND u.id=" + id);
+//			}
+//			// 查询条件username字段
+//			String username = one.getUsername();
+//			if (username != null && !username.isEmpty()) {
+//				find_sql.append(" AND u.username='" + username + "'");
+//			}
+//			// 查询条件password字段
+//			String password = one.getPassword();
+//			if (password != null && !password.isEmpty()) {
+//				find_sql.append(" AND u.password='" + password + "'");
+//			}
+//			// 查询条件rule字段
+//			String rule = one.getRule();
+//			if (rule != null && !rule.isEmpty()) {
+//				find_sql.append(" AND u.rule='" + rule + "'");
+//			}
+//			// 查询条件realname字段，模糊查询
+//			String realname = one.getRealname();
+//			if (realname != null && !realname.isEmpty()) {
+//				find_sql.append(" AND u.realname LIKE '%" + realname + "%'");
+//			}
+//			// 查询条件sex字段
+//			String sex = one.getSex();
+//			if (sex != null && !sex.isEmpty()) {
+//				find_sql.append(" AND u.sex='" + sex + "'");
+//			}
+//			// 查询条件city字段
+//			if (one.getCity() != null) {
+//				Integer city = one.getCity();
+//				if (city != null && city != 0) {
+//					find_sql.append(" AND u.city=" + city);
+//				}
+//			}
+//			// 查询条件cert_type字段
+//			if (one.getCertType() != null) {
+//				Integer certtype = one.getCertType().getId();
+//				if (certtype != null && certtype != 0) {
+//					find_sql.append(" AND u.cert_type=" + certtype);
+//				}
+//			}
+//			// 查询条件cert字段
+//			String cert = one.getCert();
+//			if (cert != null && !cert.isEmpty()) {
+//				find_sql.append(" AND u.cert LIKE '%" + cert + "%'");
+//			}
+//			// 查询条件user_type字段
+//			if (one.getUserType() != null) {
+//				Integer usertype = one.getUserType().getId();
+//				if (usertype != null && usertype != 0) {
+//					find_sql.append(" AND u.user_type=" + usertype);
+//				}
+//			}
+//			// 查询条件content字段
+//			String content = one.getContent();
+//			if (content != null && !content.isEmpty()) {
+//				find_sql.append(" AND u.content LIKE '%" + content + "%'");
+//			}
+//			// 查询条件status字段
+//			String status = one.getStatus();
+//			if (status != null && !status.isEmpty()) {
+//				find_sql.append(" AND u.status='" + status + "'");
+//			}
+//			// 查询条件login_ip字段
+//			String ip = one.getLogin_ip();
+//			if (ip != null && !ip.isEmpty()) {
+//				find_sql.append(" AND u.login_ip='" + ip + "'");
+//			}
+//			// 查询条件image_path字段
+//			String image = one.getImage_path();
+//			if (image != null && !image.isEmpty()) {
+//				find_sql.append(" AND u.image_path='" + image + "'");
+//			}
+//
+//			User user = null;
+//			PreparedStatement pstmt = null;
+//			// 声明分页工具接口对象
+//			Pageable rs = null;
+//			List<User> list = new ArrayList<User>();
+//			try {
+//				pstmt = conn.prepareStatement(find_sql.toString(),
+//						ResultSet.TYPE_SCROLL_INSENSITIVE,
+//						ResultSet.CONCUR_READ_ONLY);
+//				rs = new PageableResultSet(pstmt.executeQuery());
+//				rs.setPageSize(pageSize);
+//				rs.gotoPage(pageNum);
+//				for (int i = 0; i < rs.getPageRowsCount(); i++) {
+//					rs.next();
+//
+//					// 解析结果集对象，封装查询结果
+//					user = new User();
+//					user.setId(rs.getInt("id"));
+//					user.setUsername(rs.getString("username"));
+//					user.setPassword(rs.getString("password"));
+//					user.setRule(rs.getString("rule"));
+//					user.setRealname(rs.getString("realname"));
+//					user.setSex(rs.getString("sex"));
+//
+//					// city
+//					Province province = new Province();
+//					province.setId(rs.getInt("pid"));
+//					province.setProvince(rs.getString("pprovince"));
+//					province.setProvinceId(rs.getString("pprovinceid"));
+//
+//					City city = new City();
+//					city.setId(rs.getInt("cid"));
+//					city.setCityId(rs.getString("ccityid"));
+//					city.setCity(rs.getString("ccity"));
+//					city.setProvince(province);
+//
+//					user.setCity(city);
+//
+//					// CertType
+//					CertType certType = new CertType();
+//					certType.setId(rs.getInt("eid"));
+//					certType.setContent(rs.getString("econtent"));
+//					user.setCertType(certType);
+//
+//					user.setCert(rs.getString("cert"));
+//					user.setBirthday(rs.getDate("birthday"));
+//
+//					// UserType
+//					UserType userType = new UserType();
+//					userType.setId(rs.getInt("tid"));
+//					userType.setContent(rs.getString("tcontent"));
+//					user.setUserType(userType);
+//
+//					user.setContent(rs.getString("content"));
+//					user.setStatus(rs.getString("status"));
+//					user.setLoginIp(rs.getString("login_ip"));
+//					user.setImagePath(rs.getString("image_path"));
+//
+//					list.add(user);
+//				}
+//			} finally {
+//				DBUtils.closeStatement(rs, pstmt);
+//			}
+//			return list;
+//		}
+
+	@Override
+	public List<User> getUserListRS(int pageSize, int pageNum, User one)
+			throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	}
 
-}
+
+

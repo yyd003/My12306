@@ -72,7 +72,6 @@ var req=false;
 	}
 	// 处理请求
 	function processRequest(){
-		init();
 		// document.getElementById("res").innerHTML="已经被占用";
 		if(window.XMLHttpRequest){
 			req =new XMLHttpRequest();
