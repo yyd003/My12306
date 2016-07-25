@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>12306订票系统</title>
-	<link rel="stylesheet" type="text/css" href="css/Login.css">
+<meta charset="UTF-8">
+<title>12306订票系统</title>
+<link rel="stylesheet" type="text/css" href="css/Login.css">
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	function createCode(len)  
         {  
             var seed = new Array(  
@@ -36,41 +36,46 @@
 	</script>
 </head>
 <body>
-	<form action="login" method="post" >
-		<fieldset>			
-				<div id = "header" class="box">
-				head
-				</div>
+	<form action="login" method="post">
+		<fieldset>
+			<div id="header" class="box">head</div>
 
-				<div id = "leftera" class = "box fl">
-					left
-				</div>
+			<div id="leftera" class="box fl">left</div>
 
-				<div id = "rightera" class = "box fr">
+			<div id="rightera" class="box fr">
 				<center>
-					<h4><font size = "6" color = "black">Login</font><font color = "red">用户登录</font></h4></br>
-					<table width = 100%>
+					<h4>
+						<font size="6" color="black">Login</font><font color="red">用户登录</font>
+					</h4>
+					</br>
+					<table width=100%>
 						<tr>
-							<td width = '20%'>用户名：</td>
-							<td width = '40%'><input type="text" id = "username" name="username" required = "true"></td>
+							<td width='20%'>用户名：</td>
+							<td width='40%'><input type="text" id="username"
+								name="username" required="true"></td>
 						</tr>
 						<tr>
-							<td width = '20%'>密码：</td>
-							<td width = '40%'><input type="password" id = "password" name="password" required = "true"></td>
+							<td width='20%'>密码：</td>
+							<td width='40%'><input type="password" id="password"
+								name="password" required="true"></td>
 						</tr>
 						<tr>
-							<td width = '20%'>验证码：</td>
-							<td width = '40%'><input type="text" id = "inputRandom" required = "true" onblur="test()"></td>
-        					<td><label id="autoRandom" value=""></label>&nbsp<INPUT TYPE="button" VALUE="获取验证码" ONCLICK="autoRandom.innerHTML=createCode(4)"></td> 
+							<td width='20%'>验证码：</td>
+							<td width='40%'><input type="text" id="inputRandom"
+								required="true" onblur="test()"></td>
+							<td><label id="autoRandom" value=""></label>&nbsp<INPUT
+								TYPE="button" VALUE="获取验证码"
+								ONCLICK="autoRandom.innerHTML=createCode(4)"></td>
 						</tr>
-					</table></br></br>
-							<input type="submit" value = "登录">
-							&nbsp;&nbsp;&nbsp;&nbsp;
-							<input type="button" value = "注册新用户" onclick="window.location.href ='register?action=show'"">
-				<!-- document.location.href='UserRegistration.jsp'; -->
+					</table>
+					</br>
+					</br> <input type="submit" value="登录"> &nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" value="注册新用户"
+						onclick="window.location.href ='register?action=show'"">
+					<!-- document.location.href='UserRegistration.jsp'; -->
 				</center>
-				</div>
-				
+			</div>
+
 		</fieldset>
 	</form>
 </body>
