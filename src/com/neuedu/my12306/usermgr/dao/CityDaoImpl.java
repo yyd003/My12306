@@ -31,9 +31,11 @@ public class CityDaoImpl implements CityDao {
 			pstmt = (PreparedStatement) conn.prepareStatement(ES_sql);
 			pstmt.setString(1, s);
 			rs = pstmt.executeQuery();
-			if (rs.next()) {
+			while (rs.next()) {
 				c = new City();
 				c.setId(rs.getInt("id"));
+				c.setFather(rs.getInt("father"));
+				c.setCityId(rs.getString("cityid"));
 				c.setCity(rs.getString("city"));
 				result.add(c);
 			}

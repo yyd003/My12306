@@ -202,7 +202,7 @@ public City findByCity(String s){
 
 		CityDao ctd = new CityDaoImpl(conn);
 
-		cl = ctd.exactSearch("city", s);
+		cl = ctd.exactSearch("cityid", s);
 		if(!cl.isEmpty())	c=cl.get(0);
 
 		DBUtils.commit(conn);

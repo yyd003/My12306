@@ -16,8 +16,8 @@ public void setContent(String content) {
 	this.content = content;
 }
 
-@Override
-public String toString(){
-	return "证件类型编号:"+id+"证件类型:"+content;
-}
+//@Override
+//public String toString(){
+//	return "证件类型编号:"+id+"证件类型:"+content;
+//}
 }

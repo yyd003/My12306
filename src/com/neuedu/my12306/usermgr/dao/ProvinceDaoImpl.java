@@ -81,6 +81,7 @@ public class ProvinceDaoImpl implements ProvinceDao {
 			while (rs.next()) {
 				Province one = new Province();
 				one.setId(rs.getInt("id"));
+				one.setProvinceid(rs.getString("provinceid"));
 				one.setProvince(rs.getString("Province"));
 				result.add(one);
 			}
