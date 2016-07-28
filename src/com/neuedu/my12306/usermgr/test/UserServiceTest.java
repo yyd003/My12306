@@ -111,4 +111,15 @@ public class UserServiceTest {
 			}
 	
 	}
+	@Test
+	public void testRS() {
+		UserService c = UserService.getInstance();
+			try {
+				Assert.assertNotNull(c.getUserListRS(10, 1, new User()));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	
+	}
 }

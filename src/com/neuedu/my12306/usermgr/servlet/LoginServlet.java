@@ -60,10 +60,13 @@ public class LoginServlet extends HttpServlet {
 		tmp.setUsername(username);
 		tmp.setPassword(Md5Utils.md5(password));
 		User dbUser =userService.findUser(tmp);
-		
+		if(dbUser ==null){
+			response.sendRedirect(request.getContextPath()
+					+ "/error.jsp");
+		}else
 		if ("1".equals(dbUser.getRule())) {
 			response.sendRedirect(request.getContextPath()
-					+ "/Admin/Index.jsp");
+					+ "/admin?action=show");
 		} else {
 			response.sendRedirect(request.getContextPath()
 					+ "/User/Index.jsp");

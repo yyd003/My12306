@@ -286,7 +286,22 @@ public class UserService {
 
 	public List<User> getUserListRS(int t, int i, User c) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		List<User> res = null;
+		try {
+			conn = DBUtils.getConnection();
+			UserDao certTypeDao = new UserDaoImpl(conn);
+			DBUtils.beginTranscation(conn);
+			res = certTypeDao.getUserListRS(t, i, c);
+			DBUtils.commit(conn);
+		} catch (Exception e) {
+			// TODO: handle exception
+			DBUtils.rollback(conn);
+			e.printStackTrace();
+		} finally {
+			DBUtils.closeConnection(conn);
+		}
+		return res;
 	}
 
 }

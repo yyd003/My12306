@@ -110,5 +110,15 @@ public class UserDaoImplTest {
 			e.printStackTrace();
 		}
 	}
+	@Test
+	public void testRS() {
+		UserDao c = new UserDaoImpl(DBUtils.getConnection());
+		User U=new User();   
+		try {
+			Assert.assertNotNull(c.getUserListRS(10, 1, new User()));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}}
 
 }

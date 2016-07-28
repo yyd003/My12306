@@ -4,9 +4,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Admin</title>
-	<link rel="stylesheet" href="../bootstrap/css/bootstrap.css">
-	<script src="../bootstrap/js/jquery.min.js"></script>
-	<script   src="../bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+	<script src="bootstrap/js/jquery.min.js"></script>
+	<script   src="bootstrap/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -84,13 +84,13 @@
 							<c:out value="${s.sex}" />
 						</td>
 						<td>
-							<c:out value="${s.cert_type.content}" />
+							<c:out value="${s.cert_type}" />
 						</td>
 						<td>
 							<c:out value="${s.cert}" />
 						</td>
 						<td>
-							<c:out value="${s.user_type.content}" />
+							<c:out value="${s.user_type}" />
 						</td>
 						<td>
 							<c:out value="${s.city.city}" />

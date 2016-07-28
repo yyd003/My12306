@@ -54,7 +54,7 @@ public class RegisterServlet extends HttpServlet {
 			doUsernameCheck(request, response);
 		} else if ("show".equals(action)) {
 			dataInit(request, response);
-		request.getRequestDispatcher("/UserRegistration.jsp").forward(request, response);
+		request.getRequestDispatcher("/Login.jsp").forward(request, response);
 		} else if ("findCity".equals(action)) {
 			doFindCity(request, response);
 		}
